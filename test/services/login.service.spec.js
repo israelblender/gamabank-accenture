@@ -18,11 +18,11 @@ describe('Teste API login.service', ()=>{
         const login = await loginService.check('ISRAELGOMES.PROG@gmail.com', 'blender3d')
         assert.isObject(login)
     })
-    it("Deve conter as propriedades apropriadas para APROVAÇÃO", async ()=>{
+    it("Deve conter as propriedades de aprovação", async ()=>{
         const login = await loginService.check('ISRAELGOMES.PROG@gmail.com', 'blender3d')
         assert.hasAllKeys(login, ['is_valid', 'user_id'])
     })
-    it("Deve conter as propriedades apropriadas para REPROVAÇÃO", async ()=>{
+    it("Deve conter as propriedades de reprovação", async ()=>{
         const login = await loginService.check('ISRAELGOMES.PROG@gmail.com', 'blender3d--')
         assert.hasAllKeys(login, ['is_valid', 'message'])
     })

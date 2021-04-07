@@ -108,3 +108,6 @@ dist
 
 # Database Configuration
 .env
+
+# Visual Code Configuration
+.vscode

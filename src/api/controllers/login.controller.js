@@ -4,9 +4,9 @@ const LoginService = require("../services/login.service");
 const login = async (request, h) => {
     const { username, password } = request.payload
 
-    const login_result = await LoginService.checkLogin(username, password)
+    const login_result = await LoginService.check(username, password)
 
-    if (login_result.is_valid) return await AuthService.sign( login_result )
+    if (login_result.auth) return await AuthService.sign( {user_id:login_result.user_id} )
     else  return h.response( AuthService.noSign(login_result) ).code(401)
 }
 

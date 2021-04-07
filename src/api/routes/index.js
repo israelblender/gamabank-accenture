@@ -1,7 +1,7 @@
 const AppController = require('../controllers/app.controller')
-const AuthController = require('../controllers/auth.controller')
+const AuthController = require('../controllers/login.controller')
 
-const { LoginRequestDTO, LoginResponseSuccessDTO, LoginResponseErrorDTO } = require('../models/dto/auth.dto')
+const { LoginRequestDTO, LoginResponseSuccessDTO, LoginResponseErrorUnauthorizedDTO } = require('../models/dto/auth.dto')
 const Joi = require('joi')
 
 
@@ -40,8 +40,8 @@ const loginRoute = {
         response: {
           status: {
             200: LoginResponseSuccessDTO,
-            400: LoginResponseErrorDTO,
-            500: Joi.any()
+            400: Joi.any(),
+            401: LoginResponseErrorUnauthorizedDTO
           }
         }
     }
