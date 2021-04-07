@@ -7,7 +7,8 @@ const sign = async object => {
 
     return { auth: true, token }
 }
-const noSign = () =>{
+const noSign = (object) =>{
+    if (object) return object
     return {
         auth: false,
         message: 'Failed to autentication username or password'

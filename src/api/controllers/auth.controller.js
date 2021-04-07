@@ -6,8 +6,8 @@ const login = async (request, h) => {
 
     const login_result = await LoginService.checkLogin(username, password)
 
-    if (login_result.isValid) return await AuthService.sign({user_id:login_result.id})
-    else  return h.response( AuthService.noSign() ).code(401)
+    if (login_result.is_valid) return await AuthService.sign( login_result )
+    else  return h.response( AuthService.noSign(login_result) ).code(401)
 }
 
 // const validate = async (request, h) => {
