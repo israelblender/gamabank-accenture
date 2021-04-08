@@ -21,7 +21,7 @@ const payWithDebit = async (userId, cpf, value) => {
       return Boom.conflit('Saldo insuficiente')
   }
 
-  if(validarCPF(cpf)) {
+  if(!(validarCPF(cpf))) {
       return Boom.badRequest('Cpf inválido');
   }
 
