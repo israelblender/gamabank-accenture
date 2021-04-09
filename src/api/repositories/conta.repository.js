@@ -9,21 +9,6 @@ const findContaByUserId = async (idUsuario) => {
   return account[0];
 };
 
-const findContaByUserEmail = async (emailUsuario) => {
-  const user = await database.execute(
-    `SELECT * FROM usuario WHERE email='${emailUsuario}'`
-  );
-
-  return user[0];
-};
-
-const alterSaldoConta = async (id, valor) => {
-  const saldo = await database.execute(
-    `UPDATE conta SET saldo = ${valor} WHERE idUsuario = '${id}'`
-  );
-  return saldo;
-};
-
 const createConta = async (idUsuario) => {
   const saldo = 0;
   const dateAbertura = new Date();
@@ -35,9 +20,17 @@ const createConta = async (idUsuario) => {
   return { id: create.insertId };
 };
 
-module.exports = {
-  createConta,
-  findContaByUserId,
-  findContaByUserEmail,
-  alterSaldoConta,
-};
+const extratoByContaId = async (userId, dt_inicial, dt_final) => {
+
+    const conta = await findContaByUserId(userId);
+
+    console.log(conta)
+
+    const sqlStatement = `SELECT data, descricao, tipo, valor FROM transacoes WHERE idConta = ${conta.id} AND data BETWEEN ${dt_inicial} AND ${dt_final} ORDER BY data DESC`
+
+    const result = await database.execute(sqlStatement)
+    
+    return result
+}
+
+module.exports = { createConta, findContaByUserId, extratoByContaId };

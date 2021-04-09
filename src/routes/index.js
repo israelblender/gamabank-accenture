@@ -7,7 +7,7 @@ const {
 const authController = require("../api/controllers/auth.controller");
 const userController = require("../api/controllers/user.controller");
 const transferController = require("../api/controllers/transfer.controller");
-const faturaService = require("../api/services/fatura.service");
+const invoiceController = require("../api/controllers/invoice.controller");
 
 const {
   LoginRequestDTO,
@@ -83,8 +83,9 @@ const createUser = {
 const getOpenInvoices = {
   method: "GET",
   path: "/invoice",
-  handler: faturaService.getOpenInvoice,
+  handler: invoiceController.getOpenedInvoice,
   options: {
+    auth: "jwt",
     tags: ["api", "Invoices"],
     description: "Verificação do status da aplicação",
     notes: "Pode ser utilizado sempre que outra aplicação estiver monitorando",
