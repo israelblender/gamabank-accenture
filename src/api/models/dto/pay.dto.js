@@ -4,7 +4,7 @@ const BuyDebitRequestDTO = Joi.object({
 
     cpf: Joi.string().required(),
     value: Joi.string().required(),
-    userId: Joi.string.required()
+    userId: Joi.string().required()
 
 }).label("BuyDebitRequestDTO");
 

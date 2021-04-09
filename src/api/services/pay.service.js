@@ -1,8 +1,8 @@
-const launchRepository = require("../repositories/launch.repository");
+const lancamentoRepository = require("../repositories/lancamento.repository");
 const contaRepository = require("../repositories/conta.repository");
 const validarCPF = require("../../helpers/cpf.helper");
 const Boom = require("@hapi/boom");
-
+const { sendMessage } = require("../../helpers/nodemailer");
 
 const payWithDebit = async (userId, cpf, value) => {
     
@@ -29,12 +29,16 @@ const payWithDebit = async (userId, cpf, value) => {
     return Boom.conflit('Pagamento nao pode ser efetuado')
   }
 
-  await launchRepository.createNewLaunchPay(cpf, value);
+  await lancamentoRepository.createNewLaunchPay(cpf, value);
     
   let restValue = parseFloat(findAccount.saldo) - valueAdd;
   
   await contaRepository.updateBalanceAccount(userId, restValue);
-  
+
+  const findEmailByUser = findAccount.email;
+
+  await sendMessage(findEmailByUser, `Pagamento realizado pelo ${cpf}, R$ ${value}`);
+
   // retorno mensagem c
   return {
       

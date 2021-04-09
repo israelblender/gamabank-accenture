@@ -7,14 +7,4 @@ const rootHandler = (request, h) => {
   };
 };
 
-const statusHandler = (request, h) => {
-  const { userId, acccountId } = request.auth.credentials;
-
-  return {
-    status: "true",
-    logged: process.env.LOGGED,
-    now: Date.now(),
-  };
-};
-
-module.exports = { rootHandler, statusHandler };
+module.exports = { rootHandler };

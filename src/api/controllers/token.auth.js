@@ -6,10 +6,9 @@ const generate = (userData) =>
     JWT.sign(
       userData,
       "keytest",
-      { algorithm: "HS256", expiresIn: "2d" },
+      { algorithm: "HS256", expiresIn: "20m" },
       (err, token) => {
         if (err) {
-          console.error(err);
           throw new Error("ERR_INVALID_TOKEN");
         }
 

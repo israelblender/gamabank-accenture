@@ -1,32 +1,22 @@
-const joi = require('joi')
+const joi = require("joi");
 
-const LoginRequestDTO = joi.object({
-    username: joi.string().max(50).required(),
-    password: joi.string().max(30).required()
-}).label('LoginRequestDTO')
+const LoginRequestDTO = joi
+  .object({
+    email: joi.string().required(),
+    senha: joi.string().required(),
+  })
+  .label("LoginRequestDTO");
 
-
-const LoginResponseSuccessDTO = joi.object({
+const LoginResponseSuccessDTO = joi
+  .object({
+    message: "Login efetuado com sucesso",
     token: joi.string(),
-    auth: joi.bool()
-}).label('LoginResponseSuccessDTO')
+  })
+  .label("LoginResponseSuccessDTO");
 
 //Tentativa de login não autorizada com username ou pass incorreto
-//Utilização de token inválido ou vencido
-const LoginResponseErrorUnauthorizedDTO = joi.object({
-    message: joi.string().allow('Failed to autentication username or password', 'Failed to autentication'),
-    auth: joi.boolean().default(false)
-}).label('LoginResponseErrorDTO')
-
-const LoginResponseErrorBadDTO = joi.object({
-    message: joi.string().default('Invalid request'),
-    auth: joi.boolean().default(false)
-}).label('LoginResponseErrorDTO')
-
 
 module.exports = {
-    LoginRequestDTO,
-    LoginResponseSuccessDTO,
-    LoginResponseErrorUnauthorizedDTO,
-    LoginResponseErrorBadDTO
-}
+  LoginRequestDTO,
+  LoginResponseSuccessDTO,
+};
