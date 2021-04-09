@@ -11,7 +11,7 @@ const register = async (id, descricao ,valor) => {
     return register
 }
 
-const createNewLaunchPay = async (cpf, value) => {
+const createNewLaunchPay = async (id, cpf, value) => {
     const data = new Date();
     const tipo = 'PAGAMENTO';
     const descricao = `Pagamento em débito pelo cpf: ${cpf}`;

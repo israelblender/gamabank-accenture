@@ -14,6 +14,7 @@ const payWithDebit = async (userId, cpf, value) => {
   };
 
   if(valuAdd < 0) {
+
       return Boom.conflict('Valor para pagamento inválido')
   }
     
@@ -29,7 +30,9 @@ const payWithDebit = async (userId, cpf, value) => {
     return Boom.conflit('Pagamento nao pode ser efetuado')
   }
 
-  await lancamentoRepository.createNewLaunchPay(cpf, value);
+  const isAccount = findAccount.id;
+
+  await lancamentoRepository.createNewLaunchPay(isAccount, cpf, value);
     
   let restValue = parseFloat(findAccount.saldo) - valueAdd;
   

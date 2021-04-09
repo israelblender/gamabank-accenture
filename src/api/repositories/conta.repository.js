@@ -17,13 +17,6 @@ const findContaByUserEmail = async (emailUsuario) => {
   return user[0];
 };
 
-const alterSaldoConta = async (id, valor) => {
-  const saldo = await database.execute(
-    `UPDATE conta SET saldo = ${valor} WHERE idUsuario = '${id}'`
-  );
-  return saldo;
-};
-
 const createConta = async (idUsuario) => {
   const saldo = 0;
   const dateAbertura = new Date();

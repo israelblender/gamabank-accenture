@@ -124,7 +124,7 @@ const Transfer = {
 };
 
 const payDebit = {
-  method: "PUT",
+  method: "POST",
   path: "/pay/deposit",
   handler: payController.payWithDebit,
   options: {
