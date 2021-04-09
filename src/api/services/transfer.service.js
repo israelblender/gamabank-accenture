@@ -35,9 +35,9 @@ const transferIntern = async (id, email, valor) => {
   let valorDebit = parseFloat(verifySaldo.saldo) - valorC;
   let valorCredit = parseFloat(saldoContaDestiny.saldo) + valorC;
   
-  await contaRepository.alterSaldoConta(id, valorDebit);
+  await contaRepository.updateBalanceAccount(id, valorDebit);
   
-  await contaRepository.alterSaldoConta(saldoContaDestiny.id, valorCredit);
+  await contaRepository.updateBalanceAccount(saldoContaDestiny.id, valorCredit);
 
   await sendMessage(userAccount.email, `Transferência para ${email}, R$ ${valor}`);
   
@@ -75,7 +75,7 @@ const transferExtern = async (id, codigoBanco, cpf, valor) => {
 
   let valorDebit = verifySaldo.saldo - valorC;
 
-  await contaRepository.alterSaldoConta(id, valorDebit);
+  await contaRepository.updateBalanceAccount(id, valorDebit);
   
   await sendMessage(userAccount.email, `Transferência para o CPF ${cpf} no valor de R$ ${valor}`);
 
