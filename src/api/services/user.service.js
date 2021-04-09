@@ -3,6 +3,8 @@ const userRepository = require("../repositories/user.repository");
 const contaService = require("../services/conta.service");
 const cpfHelper = require("../../helpers/cpf.helper");
 const checkPassword = require("../../helpers/checkPassword");
+const checkEmail = require("../../helpers/email.helper");
+const checkPhone = require("../../helpers/phone.helper");
 
 const createUser = async (nome, cpf, email, senha, telefone) => {
   //valida cpf
@@ -12,6 +14,20 @@ const createUser = async (nome, cpf, email, senha, telefone) => {
   if (!validaCpf) {
     console.log("CPF invalido");
     throw Boom.badRequest("CPF INVALIDO");
+  }
+
+  const valideEmail = await checkEmail(email);
+
+  if (!valideEmail) {
+    console.log("Email invalido");
+    throw Boom.badRequest("Email INVALIDO");
+  }
+
+  const validePhone = await checkPhone(telefone);
+
+  if (!validePhone) {
+    console.log("Telefone invalido");
+    throw Boom.badRequest("Telefone INVALIDO");
   }
 
   // verifico se usuario já existe
