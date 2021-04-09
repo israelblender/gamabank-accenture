@@ -20,4 +20,17 @@ const createConta = async (idUsuario) => {
   return { id: create.insertId };
 };
 
-module.exports = { createConta, findContaByUserId };
+const extratoByContaId = async (userId, dt_inicial, dt_final) => {
+
+    const conta = await findContaByUserId(userId);
+
+    console.log(conta)
+
+    const sqlStatement = `SELECT data, descricao, tipo, valor FROM transacoes WHERE idConta = ${conta.id} AND data BETWEEN ${dt_inicial} AND ${dt_final} ORDER BY data DESC`
+
+    const result = await database.execute(sqlStatement)
+    
+    return result
+}
+
+module.exports = { createConta, findContaByUserId, extratoByContaId };
