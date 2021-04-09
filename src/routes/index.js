@@ -128,6 +128,7 @@ const payDebit = {
   path: "/pay/deposit",
   handler: payController.payWithDebit,
   options: {
+    auth: "jwt",
     tags: ["api", "debito", "pagamento"],
     description: "Rota para realizar pagamento com débito",
     notes: "Obs: CPF é obrigatorio para executar com sucesso",

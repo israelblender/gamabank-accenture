@@ -22,7 +22,7 @@ const payWithDebit = async (userId, cpf, value) => {
   }
 
   if(!(validarCPF(cpf))) {
-      return Boom.badRequest('Cpf inválido');
+      return Boom.badRequest('CPF inválido');
   }
 
   if((parseFloat(findAccount.saldo) - valueAdd) < 0) {
@@ -47,3 +47,7 @@ const payWithDebit = async (userId, cpf, value) => {
 };
     
 };
+
+module.exports = {
+  payWithDebit
+}
