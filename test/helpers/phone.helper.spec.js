@@ -3,7 +3,7 @@ const assert = require("chai").assert;
 const checkPhone = require("../../src/helpers/phone.helper");
 
 describe("Check Phone helper Tool", async () => {
-  it("should be return false when receive a invalid phone number", async () => {
+  it("Deve retornar false quando receber um número de telefone inválido", async () => {
     const phone = "(11) 265458";
 
     const check = await checkPhone(phone);
@@ -11,7 +11,7 @@ describe("Check Phone helper Tool", async () => {
     assert.equal(check, false);
   });
 
-  it("should be return true when receive a valid phone number", async () => {
+  it("Deve retornar true quando receber um número de telefone válido", async () => {
     const phone = "(11) 25684675";
 
     const check = await checkPhone(phone);

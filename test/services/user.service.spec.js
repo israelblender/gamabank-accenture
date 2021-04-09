@@ -5,12 +5,10 @@ const faker = require("faker");
 
 const database = require("../../src/configs/database");
 const userService = require("../../src/api/services/user.service");
-const faturaRepository = require("../../src/api/repositories/fatura.repository");
 
 chai.use(chaiAsPromised);
 
 const expect = chai.expect;
-const assert = chai.assert;
 
 describe("User service", async () => {
   afterEach(async () => {
