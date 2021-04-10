@@ -20,7 +20,7 @@ const payWithDebit = async (userId, value) => {
 
     if(valueAdd <= 0) {
 
-        return Boom.conflict('Valor para pagamento inválido')
+        return Boom.unauthorized('Valor para pagamento inválido')
     }
 
     if (findAccount === undefined) {

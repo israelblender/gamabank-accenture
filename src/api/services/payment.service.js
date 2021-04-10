@@ -27,7 +27,7 @@ const paymentService = async (id, accountId) => {
     
         await paymentFatura(accountId, fatura.valorConsolidado);
     
-        await sendMessage(user.email, `Pagamento da fatura efetuada R$ ${fatura.valorConsolidado}`);
+        //await sendMessage(user.email, `Pagamento da fatura efetuada R$ ${fatura.valorConsolidado}`);
 
         return 'Pagamento efetuado com sucesso';
 
