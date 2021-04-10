@@ -32,14 +32,14 @@ const payWithDebit = async (userId, value) => {
   }
 
   const idAccount = findAccount.id;
-  const findCpfById = await userRepository.findUserById(userId);
+  const findCpfById = await userRepository.findUserById(userId).cpf;
 
   if(!(validarCPF(findCpfById))) {
 
     return Boom.badRequest('CPF inválido');
   }
 
-  await lancamentoRepository.createNewLaunchPay(idAccount, findCpfById, value);
+  await lancamentoRepository.createNewLaunchPay(idAccount, findCpfById, valueAdd);
     
   let restValue = parseFloat(findAccount.saldo) - valueAdd;
   
