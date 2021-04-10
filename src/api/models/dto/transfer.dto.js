@@ -8,9 +8,7 @@ const TransferRequestDTO = Joi.object({
 
 }).label("TransferRequestDTO");
 
-const TransferResponseDTO = Joi.string().label("TransferResponseDTO");
 
 module.exports = {
     TransferRequestDTO,
-    TransferResponseDTO,
 }

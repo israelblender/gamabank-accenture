@@ -1,9 +1,7 @@
 const database = require("../../configs/database");
 
-const register = async (id, descricao ,valor) => {
+const register = async (id, tipo, descricao, valor) => {
     const data = new Date();
-    const tipo = 'TRANSFERENCIA';
-
     const register = await database.execute(
         `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${id}', '${data.toLocaleDateString('en-CA')}', '${tipo}','${descricao}','${valor}')`
     );
@@ -19,8 +17,20 @@ const createNewLaunchPay = async (idAccount, cpf, value) => {
     const newLaunch = await database.execute(
         `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString('en-US')}', '${tipo}','${descricao}','${value}')`
     );
+    return newLaunch
+}
+
+const createNewLaunchDebit = async (idAccount, cpf, value) => {
+    const data = new Date();
+    const tipo = 'DÉBITO';
+    const descricao = `Déposito em conta do correntista pelo cpf: ${cpf}`;
+
+    const newLaunch = await database.execute(
+        `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString('en-US')}', '${tipo}','${descricao}','${value}')`
+    );
 
     return newLaunch
 }
 
-module.exports = { register, createNewLaunchPay };
+module.exports = { register, createNewLaunchPay, createNewLaunchDebit };
+

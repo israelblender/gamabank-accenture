@@ -1,8 +1,26 @@
 const chai = require('chai');
 const assert = chai.assert;
+const chaiAsPromised = require("chai-as-promised");
 const { payWithDebit} = require('../../src/api/services/pay.service')
+const { updateBalanceAccount } = require('../../src/api/repositories/conta.repository');
+const { createUser } = require('../../src/api/services/user.service');
+const database = require("../../src/configs/database");
+
+chai.use(chaiAsPromised);
 
 describe('Validar o service de pagamento por debito', async() => {
+
+    before(async () => {
+        const user = await createUser("ana carolina", "607.128.880-04", "carolteste@teste.com", "Ana123!", "98925-7759");
+        await createUser("carol", "108.789.256-60", "ana.teste@teste.com", "Ana123!", "57925-9959");
+        await updateBalanceAccount(user.id, 20000);
+
+    });
+
+    after(async () => {
+        await database.rollback();
+    });
+
     describe('Pagamento', async () => {
 
         it('Deve retornar pagamento realizado com sucesso', async () => {

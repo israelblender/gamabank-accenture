@@ -9,9 +9,9 @@ const findContaByUserId = async (idUsuario) => {
   return account[0];
 };
 
-const findContaByUserEmail = async (emailUsuario) => {
+const findAccountByEmail = async (email) => {
   const user = await database.execute(
-    `SELECT * FROM usuario WHERE email='${emailUsuario}'`
+    `SELECT * FROM usuario WHERE email='${email}'`
   );
 
   return user[0];
@@ -20,9 +20,9 @@ const findContaByUserEmail = async (emailUsuario) => {
 const createConta = async (idUsuario) => {
   const saldo = 0;
   const dateAbertura = new Date();
-
+  const dateAberturaFormated = dateAbertura.toISOString().split('T')[0]
   const create = await database.execute(
-    `INSERT INTO conta ( idUsuario, saldo, dateAbertura) VALUES ('${idUsuario}', ${saldo},'${dateAbertura.toLocaleDateString()}');`
+    `INSERT INTO conta ( idUsuario, saldo, dateAbertura) VALUES ('${idUsuario}', ${saldo},'${dateAberturaFormated}');`
   );
 
   return { id: create.insertId };
@@ -36,4 +36,4 @@ const updateBalanceAccount = async (userId, value) => {
   return balance
 }
 
-module.exports = { createConta, findContaByUserId, findContaByUserEmail, updateBalanceAccount };
+module.exports = { createConta, findContaByUserId, findAccountByEmail, updateBalanceAccount };

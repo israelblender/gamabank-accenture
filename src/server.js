@@ -8,7 +8,7 @@ const jwtStrategy = require("./configs/jwtStrategy");
 const server = async () => {
   const hapiServer = Hapi.Server({
     host: process.env.HOST || "localhost",
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 3001,
   });
 
   await hapiServer.register(require("hapi-auth-jwt2"));
