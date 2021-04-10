@@ -42,14 +42,18 @@ const transferIntern = async (id, email, valor) => {
     
     await contaRepository.alterSaldoConta(saldoContaDestiny.id, valorCredit);
     
-    await sendMessage(userAccount.email, `Transferência para ${email}, R$ ${valor}`);
+    const sendDebit = await sendMessage(userAccount.email, `Transferência para ${email}, R$ ${valor}`);
     
-    await sendMessage(email, `Transferência recebida do ${userAccount.email}, R$ ${valor}`);
+    const sendCredit = await sendMessage(email, `Transferência recebida do ${userAccount.email}, R$ ${valor}`);
+
     
     return 'Transferência realizada com sucesso';
 
   } catch (error) {
-    console.log(error);
+    if(error.responseCode == 554){
+      return 'Transferência realizada com sucesso';
+    };
+
     return Boom.serverUnavailable('Serviço indisponível');
   };
 };

@@ -12,6 +12,11 @@ const transporter = nodemailer.createTransport({
 
 const sendMessage = (email, description) => {
     let emailApplication = process.env.NODEMAILER_USER;
+    let active = process.env.NODEMAILER_ACTIVE;
+
+    if(active == 'false'){
+      return true
+    }
     
     return new Promise((resolve, reject) => {
         transporter.sendMail({
