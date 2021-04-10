@@ -2,12 +2,10 @@ const authController = require("../api/controllers/auth.controller");
 const depositController = require("../api/controllers/deposit.controller");
 const {
   rootHandler,
-  statusHandler,
 } = require("../api/controllers/app.controller");
 const Joi = require("joi");
 const userController = require("../api/controllers/user.controller");
 const transferController = require("../api/controllers/transfer.controller");
-const faturaService = require("../api/services/fatura.service");
 const lancamentoController = require("../api/controllers/lancamento.controller");
 const payController = require("../api/controllers/pay.controller");
 const paymentController = require("../api/controllers/payment.controller");
@@ -94,7 +92,7 @@ const makeDepositAsHolder = {
     description: "Rota para o dono da conta realizar depósito em conta debito",
     notes: "Obs: So a pessoa dono da conta pode depositar",
     validate: {
-      headers: DepositHeaderDTO,
+      headers: Joi.object({ authorization: Joi.string().required() }).unknown(),//DepositHeaderDTO,
       payload: DepositHolderRequestDTO,
     },
     response: {
@@ -127,17 +125,6 @@ const makeDepositAsNotHolder = {
         503: Joi.any(),
       },
     },
-  },
-};
-
-const getOpenInvoices = {
-  method: "GET",
-  path: "/invoice",
-  handler: faturaController.getInvoice,
-  options: {
-    tags: ["api", "batata"],
-    description: "Verificação do status da aplicação",
-    notes: "Pode ser utilizado sempre que outra aplicação estiver monitorando",
   },
 };
 
@@ -174,7 +161,7 @@ const invoices = {
     notes:
       "Rota para buscar transações do mes referente, caso não informar o mes de referencia, será retornado a fatura em aberto do mes atual",
     validate: {
-      //payload: InvoiceTransactionRequestDto,
+      payload: InvoiceTransactionRequestDto,
       headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
     },
     response: {
@@ -246,7 +233,7 @@ const payDebit = {
     description: "Pagamento com débito",
     notes: "Obs: So precisa do valor para executar com sucesso",
     validate: {
-      headers: BuyDebitHeaderDTO,
+      headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
       payload: BuyDebitRequestDTO,
     },
     response: {
@@ -270,7 +257,7 @@ const payCredit = {
     description: "Pagamento com crédito",
     notes: "Obs: CPF é obrigatorio para executar com sucesso",
     validate: {
-      //headers: BuyCreditHeaderDTO,
+      headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
       payload: BuyCreditRequestDTO,
     },
     response: {
@@ -286,7 +273,7 @@ const payCredit = {
 
 const extrato = {
   method: "POST",
-  path: "/extrato",
+  path: "/extract",
   handler: lancamentoController.extrato,
   options: {
     tags: ["api", "extrato"],
@@ -295,6 +282,7 @@ const extrato = {
     notes:
       "Retorna objeto json contendo lançamentos da conta conforme critérios",
     validate: {
+      headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
       payload: ExtratoRequestDTO,
     },
     response: {
@@ -311,7 +299,6 @@ module.exports = [
   root,
   login,
   createUser,
-  getOpenInvoices,
   extrato,
   payDebit,
   makeDepositAsHolder,
@@ -319,4 +306,5 @@ module.exports = [
   transfer,
   payCredit,
   invoices,
+  payment
 ];
