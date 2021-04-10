@@ -12,7 +12,7 @@
   - [Ana Carolina](https://github.com/anacarolinacv)
   - [Bruno Augusto](https://github.com/BrunoAgst)
   - [Israel Blender](https://github.com/israelblender)
-  - [Matheus Gonçalves](any)
+  - [Matheus Gonçalves](https://github.com/mgsantos177)
 
 ## O que é?
 
