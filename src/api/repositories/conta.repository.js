@@ -9,9 +9,9 @@ const findContaByUserId = async (idUsuario) => {
   return account[0];
 };
 
-const findContaByUserEmail = async (emailUsuario) => {
+const findAccountByEmail = async (email) => {
   const user = await database.execute(
-    `SELECT * FROM usuario WHERE email='${emailUsuario}'`
+    `SELECT * FROM usuario WHERE email='${email}'`
   );
 
   return user[0];
@@ -49,7 +49,7 @@ module.exports = {
   createConta,
   findContaByUserId,
   extratoByContaId,
-  findContaByUserEmail,
+  findAccountByEmail,
   updateBalanceAccount,
 };
 // atualiza o saldo da conta

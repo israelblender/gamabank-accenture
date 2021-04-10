@@ -54,7 +54,7 @@ const updateInvoiceValueConsolidation = async (
   invoiceId,
   valueConsolidation
 ) => {
-  const invoice = await invoiceRepository.updateInvoiceValueConsolidation(
+  const invoice = await faturaRepository.updateInvoiceValueConsolidation(
     invoiceId,
     valueConsolidation
   );

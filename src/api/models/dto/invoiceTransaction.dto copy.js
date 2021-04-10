@@ -5,8 +5,8 @@ const InvoiceTransactionRequestDto = Joi.object({
 }).label("CreateUserDTO");
 
 const InvoiceTransactionResponseDto = Joi.object({
-  "Mes de referencia": Joi.string().required(),
-  "Valor da fatura": Joi.number().required(),
+  mesReferencia: Joi.string().required(),
+  valorFatura: Joi.number().required(),
   Transações: Joi.array(),
 }).label("CreateUserResponseDTO");
 
