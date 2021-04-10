@@ -2,7 +2,6 @@ const Joi = require("joi");
 
 const BuyDebitRequestDTO = Joi.object({
 
-    cpf: Joi.string().required(),
     value: Joi.string().required(),
 
 }).label("BuyDebitRequestDTO");

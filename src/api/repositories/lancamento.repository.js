@@ -11,13 +11,13 @@ const register = async (id, descricao ,valor) => {
     return register
 }
 
-const createNewLaunchPay = async (id, cpf, value) => {
+const createNewLaunchPay = async (idAccount, cpf, value) => {
     const data = new Date();
     const tipo = 'PAGAMENTO';
     const descricao = `Pagamento em débito pelo cpf: ${cpf}`;
 
     const newLaunch = await database.execute(
-        `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${id}', '${data.toLocaleDateString('en-US')}', '${tipo}','${descricao}','${value}')`
+        `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString('en-US')}', '${tipo}','${descricao}','${value}')`
     );
 
     return newLaunch

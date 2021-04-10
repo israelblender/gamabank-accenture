@@ -23,10 +23,6 @@ const payWithDebit = async (userId, value) => {
       return Boom.conflit('Saldo insuficiente')
   }
 
-  if(!(validarCPF(cpf))) {
-      return Boom.badRequest('CPF inválido');
-  }
-
   if((parseFloat(findAccount.saldo) - valueAdd) < 0) {
     return Boom.conflit('Pagamento nao pode ser efetuado')
   }
@@ -42,12 +38,10 @@ const payWithDebit = async (userId, value) => {
   await lancamentoRepository.createNewLaunchPay(idAccount, findCpfById, valueAdd);
     
   let restValue = parseFloat(findAccount.saldo) - valueAdd;
-  
-  const findIdByUser = await userRepository.findUserById(userId).id;
 
-  await contaRepository.updateBalanceAccount(findIdByUser, restValue);
+  await contaRepository.updateBalanceAccount(userId, restValue);
 
-  const findEmailByUser = findAccount.email;
+  const findEmailByUser =  await userRepository.findUserById(userId).email;
 
   await sendMessage(findEmailByUser, `Pagamento realizado pelo ${findCpfById}, R$ ${value}`);
 
