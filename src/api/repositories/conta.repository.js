@@ -29,7 +29,7 @@ const createConta = async (idUsuario) => {
   const dateAbertura = new Date();
 
   const create = await database.execute(
-    `INSERT INTO conta ( idUsuario, saldo, dateAbertura) VALUES ('${idUsuario}', ${saldo},'${dateAbertura.toLocaleDateString()}');`
+    `INSERT INTO conta ( idUsuario, saldo, dateAbertura) VALUES ('${idUsuario}', ${saldo},'${dateAbertura.toLocaleDateString('en-Ca')}');`
   );
 
   return { id: create.insertId };

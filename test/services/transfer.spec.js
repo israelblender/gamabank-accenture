@@ -1,8 +1,22 @@
 const chai = require('chai');
 const assert = chai.assert;
 const { transferIntern, transferExtern } = require('../../src/api/services/transfer.service')
+const chaiAsPromised = require("chai-as-promised");
+const { createUser } = require('../../src/api/services/user.service');
+
+chai.use(chaiAsPromised);
 
 describe('Validar o service de transferencia', async() => {
+    
+    
+    before(async () => {
+        await createUser("bruno augusto", "326.953.450-70", "Bruno123!", "58925-9959");
+    });
+
+    /*after(async () => {
+        await database.rollback();
+    });*/
+
     describe('Transferencia interna', async () => {
 
         it('Deve retornar transferencia realizada com sucesso', async () => {
