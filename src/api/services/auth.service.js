@@ -10,7 +10,7 @@ const generate = (userData) =>
     JWT.sign(
       userData,
       "keytest",
-      { algorithm: "HS256", expiresIn: 500 },
+      { algorithm: "HS256", expiresIn: "20m" },
       (err, token) => {
         if (err) {
           throw new Error("ERR_INVALID_TOKEN");
@@ -21,7 +21,7 @@ const generate = (userData) =>
     );
   });
 
-const signIn = async ({email, senha}) => {
+const signIn = async ({ email, senha }) => {
   const findUser = await userRepository.findUserByEmail(email);
 
   if (!findUser) {

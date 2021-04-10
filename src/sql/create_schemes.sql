@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `gamabank`.`lancamentos` (
 -- Table `gamabank`.`transacoescredito`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `gamabank`.`transacoescredito` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `idFatura` INT(11) NOT NULL,
   `data` DATE NOT NULL,
   `descricao` VARCHAR(255) NOT NULL,

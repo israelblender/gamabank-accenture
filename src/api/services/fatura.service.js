@@ -30,4 +30,41 @@ const getOpenInvoice = async (accountId) => {
   return findFatura;
 };
 
-module.exports = { createFatura, getOpenInvoice };
+//Obtem fatura em aberto se existir
+const findInvoiceSpecific = async (accountId, referenceMonth) => {
+  //Obtem fatura
+  const invoice = await faturaRepository.findInvoiceSpecific(
+    accountId,
+    referenceMonth
+  );
+
+  return invoice;
+};
+
+const createInvoiceSpecific = async (accountId, referenceMonth, status) => {
+  const invoice = await invoiceRepository.createInvoiceSpecific(
+    accountId,
+    referenceMonth,
+    status
+  );
+  return invoice;
+};
+
+const updateInvoiceValueConsolidation = async (
+  invoiceId,
+  valueConsolidation
+) => {
+  const invoice = await invoiceRepository.updateInvoiceValueConsolidation(
+    invoiceId,
+    valueConsolidation
+  );
+  return invoice;
+};
+
+module.exports = {
+  createFatura,
+  getOpenInvoice,
+  findInvoiceSpecific,
+  createInvoiceSpecific,
+  updateInvoiceValueConsolidation,
+};
