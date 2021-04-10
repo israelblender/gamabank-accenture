@@ -20,11 +20,11 @@ const transferIntern = async (id, email, valor) => {
     if(id === findContaDestiny.id){
       return Boom.badRequest('Transferência inválida'); 
     };
-    
+
     const verifySaldo = await contaRepository.findContaByUserId(id);
     
     const userAccount = await userRepository.findUserById(id);
-    
+
     if(verifySaldo.saldo < valorC){
       return Boom.unauthorized('Saldo insuficiente');
     };
@@ -38,7 +38,7 @@ const transferIntern = async (id, email, valor) => {
     
     await contaRepository.alterSaldoConta(id, valorDebit);
     
-    await lancamentoRepository.register(findContaDestiny.id, 'transferência', `Transferência recebida do ${userAccount.email}`, valorC);
+    await lancamentoRepository.register(findContaDestiny.id, 'TRANSFERÊNCIA', `Transferência recebida do ${userAccount.email}`, valorC);
     
     await contaRepository.alterSaldoConta(saldoContaDestiny.id, valorCredit);
     
@@ -82,7 +82,7 @@ const transferExtern = async (id, codigoBanco, cpf, valor) => {
       return Boom.unauthorized('Saldo insuficiente');
     };
   
-    await lancamentoRepository.register(id, `Transferência para ${verifyCodBanco.label} CPF ${cpf}`, valorC);
+    await lancamentoRepository.register(id, 'TRANSFERÊNCIA' ,`Transferência para ${verifyCodBanco.label}`, valorC);
   
     const userAccount = await userRepository.findUserById(id);
   
@@ -90,12 +90,16 @@ const transferExtern = async (id, codigoBanco, cpf, valor) => {
   
     await contaRepository.alterSaldoConta(id, valorDebit);
     
-    await sendMessage(userAccount.email, 'transferência',`Transferência para o CPF ${cpf} no valor de R$ ${valor}`);
+    await sendMessage(userAccount.email,`Transferência para o CPF ${cpf} no valor de R$ ${valor}`);
   
     return 'Transferência realizada com sucesso';
     
   } catch (error) {
     console.log(error);
+    if(error.responseCode == 554){
+      return 'Transferência realizada com sucesso';
+    };
+
     return Boom.serverUnavailable('Serviço indisponível');
   };
 };

@@ -1,53 +1,58 @@
 const chai = require('chai');
 const assert = chai.assert;
-const { transferIntern, transferExtern } = require('../../src/api/services/transfer.service')
+const { transferIntern, transferExtern } = require('../../src/api/services/transfer.service');
+const database = require("../../src/configs/database");
 const chaiAsPromised = require("chai-as-promised");
 const { createUser } = require('../../src/api/services/user.service');
+const { alterSaldoConta } = require('../../src/api/repositories/conta.repository');
 
 chai.use(chaiAsPromised);
 
 describe('Validar o service de transferencia', async() => {
-    
-    
+      
     before(async () => {
-        await createUser("bruno augusto", "326.953.450-70", "Bruno123!", "58925-9959");
+        const user = await createUser("bruno augusto", "326.953.450-70", "bruno.teste@teste.com", "Bruno123!", "58925-9959");
+        await createUser("ana melissa", "108.789.240-60", "melissa.teste@teste.com", "Melissa123!", "57925-9959");
+        await alterSaldoConta(user.id, 20000);
+        
+
     });
 
-    /*after(async () => {
+    after(async () => {
         await database.rollback();
-    });*/
+    });
 
     describe('Transferencia interna', async () => {
 
         it('Deve retornar transferencia realizada com sucesso', async () => {
-            const transfer = await transferIntern(2, 'bruno_agst@hotmail.com', 50);
+            const transfer = await transferIntern(1, 'melissa.teste@teste.com', 50);
             assert.equal(transfer, 'Transferência realizada com sucesso');
         });
 
         it('Deve retornar transferencia invalida', async () => {
-            const transfer = await transferIntern(1, 'bruno_agst@hotmail.com', 50);
+            const transfer = await transferIntern(1, 'bruno.teste@teste.com', 50);
             assert.equal(transfer, 'Error: Transferência inválida');
         });
 
         it('Deve retornar e-mail invalido', async () => {
-            const transfer = await transferIntern(2, 'brno_agst@hotmail.com', 200);
+            const transfer = await transferIntern(1, 'brno_agst@hotmail.com', 200);
             assert.equal(transfer, 'Error: E-mail inválido, correntista não encontrado');
         });
 
         it('Deve retornar saldo insuficiente', async () => {
-            const transfer = await transferIntern(2, 'bruno_agst@hotmail.com', 100000000000000);
+            const transfer = await transferIntern(1, 'melissa.teste@teste.com', 100000000000000);
             assert.equal(transfer, 'Error: Saldo insuficiente');
         });
     });
-
+    
     describe('Transferencia externa', async () => {
 
         it('Transferencia realizada com sucesso', async () => {
-            const transfer = await transferExtern(1, "104", "73761560036", 200);
+            const transfer = await transferExtern(1, "104", "73761560036", 10);
             assert.equal(transfer, 'Transferência realizada com sucesso');
         });
 
-        it('Deve retornar CPF inválido', async () => {
+        it('Deve retornar que o cpf é inválido', async () => {
             const transfer = await transferExtern(1, "104", "7376156006", 200);
             assert.equal(transfer, 'Error: CPF inválido');
         });
