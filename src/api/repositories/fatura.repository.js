@@ -56,4 +56,5 @@ module.exports = {
   findInvoiceSpecific,
   createInvoiceSpecific,
   updateInvoiceValueConsolidation,
+  paymentFatura
 };
