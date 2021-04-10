@@ -54,7 +54,7 @@ Api Server para solução rápida, segura e legível com serviços de controle p
 
 * Inicialize o projeto com o comando:
 
-    ```npm run start-dev``` ou ```node app.js```
+    ```npm run start-dev``` ou ```npm run start```
 
 * URI Principal:
 

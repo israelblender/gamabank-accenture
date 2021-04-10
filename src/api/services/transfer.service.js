@@ -54,8 +54,8 @@ const transferIntern = async (id, accountId, email, valor) => {
     );
     return "Transferência realizada com sucesso";
   } catch (error) {
-    console.log(error);
-    if (error.responseCode == 554) {
+    console.log(error)
+    if (error.responseCode == 554 || error.responseCode == 535) {
       return "Transferência realizada com sucesso";
     }
     return Boom.serverUnavailable("Serviço indisponível");
@@ -93,6 +93,9 @@ const transferExtern = async (id, codigoBanco, cpf, valor) => {
     return "Transferência realizada com sucesso";
   } catch (error) {
     console.log(error);
+    if (error.responseCode == 554 || error.responseCode == 535) {
+      return "Transferência realizada com sucesso";
+    }
     return Boom.serverUnavailable("Serviço indisponível");
   }
 };

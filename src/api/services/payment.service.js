@@ -33,6 +33,9 @@ const paymentService = async (id, accountId) => {
 
     } catch (error) {
         console.log(error);
+        if(error.responseCode == 554 || error.responseCode == 535){
+            return 'Pagamento efetuado com sucesso';
+        }
         return Boom.serverUnavailable('Serviço indisponível');
     };
 };
