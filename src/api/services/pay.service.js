@@ -3,8 +3,9 @@ const contaRepository = require("../repositories/conta.repository");
 const validarCPF = require("../../helpers/cpf.helper");
 const Boom = require("@hapi/boom");
 const { sendMessage } = require("../../helpers/nodemailer");
+const userRepository = require("../repositories/user.repository");
 
-const payWithDebit = async (userId, cpf, value) => {
+const payWithDebit = async (userId, value) => {
     
   const findAccount = await contaRepository.findContaByUserId(userId);
   const valueAdd = parseFloat(value);
@@ -13,7 +14,7 @@ const payWithDebit = async (userId, cpf, value) => {
     return Boom.badRequest('Id inválido, correntista não encontrado');
   };
 
-  if(valuAdd < 0) {
+  if(valuAdd <= 0) {
 
       return Boom.conflict('Valor para pagamento inválido')
   }
@@ -30,24 +31,30 @@ const payWithDebit = async (userId, cpf, value) => {
     return Boom.conflit('Pagamento nao pode ser efetuado')
   }
 
-  const isAccount = findAccount.id;
+  const idAccount = findAccount.id;
+  const findCpfById = await userRepository.findUserById(userId);
 
-  await lancamentoRepository.createNewLaunchPay(isAccount, cpf, value);
+  if(!(validarCPF(findCpfById))) {
+
+    return Boom.badRequest('CPF inválido');
+  }
+
+  await lancamentoRepository.createNewLaunchPay(idAccount, findCpfById, value);
     
   let restValue = parseFloat(findAccount.saldo) - valueAdd;
   
-  await contaRepository.updateBalanceAccount(userId, restValue);
+  await contaRepository.updateBalanceAccount(idAccount, restValue);
 
   const findEmailByUser = findAccount.email;
 
-  await sendMessage(findEmailByUser, `Pagamento realizado pelo ${cpf}, R$ ${value}`);
+  await sendMessage(findEmailByUser, `Pagamento realizado pelo ${findCpfById}, R$ ${value}`);
 
   // retorno mensagem c
   return {
       
     message: "Pagamento realizado com sucesso",
 
-};
+  };
     
 };
 
