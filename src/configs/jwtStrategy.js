@@ -1,8 +1,8 @@
 const { validate } = require("../api/services/auth.service");
-
+const secret = process.env.SECRET;
 const authName = "jwt";
 const authSchema = "jwt";
-const authOptions = { key: "keytest", validate };
+const authOptions = { key: secret, validate };
 
 module.exports = {
   authOptions,

@@ -11,17 +11,20 @@ const findUserByCpf = async (cpf) => {
 };
 
 const findUserById = async (id) => {
-  const user = await database.execute(`SELECT * FROM usuario WHERE id='${id}'`);
+  const user = await database.execute(
+    `SELECT * FROM usuario WHERE id='${id}'`
+  );
 
   // retorna primeiro registro encontrado
   return user[0];
-};
+}
 
 const findUserByEmail = async (email) => {
   const user = await database.execute(
     `SELECT * FROM usuario WHERE email='${email}'`
   );
 
+  // retorna primeiro registro encontrado
   return user[0];
 };
 

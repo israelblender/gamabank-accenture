@@ -3,6 +3,8 @@ const userRepository = require("../repositories/user.repository");
 const contaService = require("../services/conta.service");
 const cpfHelper = require("../../helpers/cpf.helper");
 const checkPassword = require("../../helpers/checkPassword");
+const checkEmail = require("../../helpers/email.helper");
+const checkPhone = require("../../helpers/phone.helper");
 
 const createUser = async (nome, cpf, email, senha, telefone) => {
   //valida cpf
@@ -10,8 +12,19 @@ const createUser = async (nome, cpf, email, senha, telefone) => {
   const validaCpf = await cpfHelper.validateCpf(cpf);
 
   if (!validaCpf) {
-    console.log("CPF invalido");
     throw Boom.badRequest("CPF INVALIDO");
+  }
+
+  const valideEmail = await checkEmail(email);
+
+  if (!valideEmail) {
+    throw Boom.badRequest("Email INVALIDO");
+  }
+
+  const validePhone = await checkPhone(telefone);
+
+  if (!validePhone) {
+    throw Boom.badRequest("Telefone INVALIDO");
   }
 
   // verifico se usuario já existe
@@ -19,7 +32,6 @@ const createUser = async (nome, cpf, email, senha, telefone) => {
 
   // caso exista retorno erro
   if (findUser) {
-    console.log("CPF duplicado");
     throw Boom.badRequest("CPF Duplicado");
   }
 

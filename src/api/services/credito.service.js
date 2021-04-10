@@ -1,6 +1,7 @@
 const creditoRepository = require("../repositories/credito.repository");
 
 const createCredito = async (idConta) => {
+
   // verifico se a conta já possui credito
   const findCredito = await creditoRepository.findCreditoByIdConta(idConta);
 

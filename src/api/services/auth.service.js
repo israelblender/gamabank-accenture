@@ -4,16 +4,16 @@ const accountRepository = require("../repositories/conta.repository");
 const bcrypt = require("../../helpers/mycrypto");
 
 const Boom = require("@hapi/boom");
+const secret = process.env.SECRET
 
 const generate = (userData) =>
   new Promise((resolve) => {
     JWT.sign(
       userData,
-      "keytest",
-      { algorithm: "HS256", expiresIn: 30 },
+      secret,
+      { algorithm: "HS256", expiresIn: "20m" },
       (err, token) => {
         if (err) {
-          console.error(err);
           throw new Error("ERR_INVALID_TOKEN");
         }
 

@@ -25,6 +25,15 @@ Api Server para solução rápida, segura e legível com serviços de controle p
 * Depósitos
 
 [!NoDesignBank: 1.0.0]()
+
+##  CORE TEAM
+
+   - [Alessandro Santos](https://github.com/expertaoliveira)
+   - [Ana Carolina](https:https://github.com/anacarolinacv)
+   - [Bruno Augusto](https://github.com/BrunoAgst)
+   - [Israel Blender](https://github.com/israelblender) 
+   - [Matheus Gonçalves](any)
+   - 
 ## Como Integrar?
 * Instalações necessárias:
   * [Node](https://nodejs.org/en/)
@@ -54,5 +63,7 @@ Api Server para solução rápida, segura e legível com serviços de controle p
 * URI Documentação:
 
     [localhost:3000/documentation](https://localhost:3000/documentation)
+    
+ 
 
 Construindo...
