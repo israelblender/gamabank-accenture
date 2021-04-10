@@ -19,6 +19,33 @@ const createCredito = async (idConta) => {
   // retorna o id do registro criado
 
   return { id: credito.insertId };
-};
+  };
 
-module.exports = { createCredito, findCreditoByIdConta };
+const getAvaliableCredit = async (accoutId) =>{
+  const credit = await database.execute(
+    `SELECT * FROM credito WHERE idConta= ${accoutId}`
+  )
+  return credit[0]
+}
+const updateAvaliableCredit = async (accoutId, new_avaliable_credit) =>{
+  const credit = await database.execute(
+    `UPDATE credito SET limiteDisponivel=${new_avaliable_credit} WHERE idConta= ${accoutId}`
+  )
+  return credit
+}
+
+const addTransaction = async (invoiceId, date, description, value)=>{
+  const transaction = await database.execute(
+    `INSERT INTO transacoesCredito(idFatura, data, descricao, valor)
+    VALUES (${invoiceId}, '${date}', '${description}', ${value})`
+  )
+  return transaction
+}
+
+module.exports = { 
+  createCredito, 
+  findCreditoByIdConta, 
+  getAvaliableCredit, 
+  updateAvaliableCredit,
+  addTransaction
+ };

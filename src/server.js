@@ -1,10 +1,9 @@
+require("./configs/bootstrap");
 const Hapi = require("@hapi/hapi");
 
 const swagger = require("./configs/swagger");
 const routes = require("./routes");
 const jwtStrategy = require("./configs/jwtStrategy");
-
-
 
 const server = async () => {
   const hapiServer = Hapi.Server({

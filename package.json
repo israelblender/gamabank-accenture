@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/app.js",
     "start-dev": "cross-env NODE_ENV=development nodemon src/app.js",
-    "test": "mocha --recursive -w"
+    "test": "cross-env NODE_ENV=test mocha 'test/**/*.spec.js' --recursisve -w"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "@hapi/inert": "^6.0.3",
     "@hapi/vision": "^6.0.1",
     "bcrypt": "^5.0.1",
+    "chai-as-promised": "^7.1.1",
     "cpf": "^2.0.1",
     "dotenv": "^8.2.0",
     "hapi-auth-jwt2": "^10.2.0",

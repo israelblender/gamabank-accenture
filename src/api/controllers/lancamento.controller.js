@@ -29,7 +29,7 @@ const extrato = async (request, h) => {
             saldo: conta.saldo
         }
     }
-    console.log(extrato)
+  
     return extrato
 }
 

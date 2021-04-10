@@ -16,7 +16,7 @@ const extratoService = async (userId, dt_inicial, dt_final) => {
 
     const extrato = await lancamentoRepository.extratoByContaId(userId, dt_inicial, dt_final)
 
-    return extrato
+    return extrato.reverse()
 
 }
 

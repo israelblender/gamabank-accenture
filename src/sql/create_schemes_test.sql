@@ -12,17 +12,17 @@ SET @OLD_SQL_MODE = @@SQL_MODE,
 -- Schema mydb
 -- -----------------------------------------------------
 -- -----------------------------------------------------
--- Schema gamabank
+-- Schema gamabank_test
 -- -----------------------------------------------------
 -- -----------------------------------------------------
--- Schema gamabank
+-- Schema gamabank_test
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `gamabank` DEFAULT CHARACTER SET latin1;
-USE `gamabank`;
+CREATE SCHEMA IF NOT EXISTS `gamabank_test` DEFAULT CHARACTER SET latin1;
+USE `gamabank_test`;
 -- -----------------------------------------------------
--- Table `gamabank`.`usuario`
+-- Table `gamabank_test`.`usuario`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `gamabank`.`usuario` (
+CREATE TABLE IF NOT EXISTS `gamabank_test`.`usuario` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(255) NULL DEFAULT NULL,
   `cpf` VARCHAR(15) NULL DEFAULT NULL,
@@ -35,33 +35,33 @@ CREATE TABLE IF NOT EXISTS `gamabank`.`usuario` (
   UNIQUE INDEX `cpf` (`cpf` ASC),
   UNIQUE INDEX `email` (`email` ASC),
   UNIQUE INDEX `senha` (`senha` ASC)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = latin1;
+) ENGINE = Memory DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
--- Table `gamabank`.`conta`
+-- Table `gamabank_test`.`conta`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `gamabank`.`conta` (
+CREATE TABLE IF NOT EXISTS `gamabank_test`.`conta` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `idUsuario` INT(11) NOT NULL,
   `saldo` DOUBLE NULL DEFAULT NULL,
   `dateAbertura` DATE NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `idUsuario` (`idUsuario` ASC),
-  CONSTRAINT `conta_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `gamabank`.`usuario` (`id`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = latin1;
+  CONSTRAINT `conta_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `gamabank_test`.`usuario` (`id`)
+) ENGINE = Memory DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
--- Table `gamabank`.`credito`
+-- Table `gamabank_test`.`credito`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `gamabank`.`credito` (
+CREATE TABLE IF NOT EXISTS `gamabank_test`.`credito` (
   `idConta` INT(11) NOT NULL,
   `limite` DOUBLE NULL DEFAULT NULL,
   `limiteDisponivel` DOUBLE NULL DEFAULT NULL,
   INDEX `idConta` (`idConta` ASC),
-  CONSTRAINT `credito_ibfk_1` FOREIGN KEY (`idConta`) REFERENCES `gamabank`.`conta` (`id`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = latin1;
+  CONSTRAINT `credito_ibfk_1` FOREIGN KEY (`idConta`) REFERENCES `gamabank_test`.`conta` (`id`)
+) ENGINE = Memory DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
--- Table `gamabank`.`fatura`
+-- Table `gamabank_test`.`fatura`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `gamabank`.`fatura` (
+CREATE TABLE IF NOT EXISTS `gamabank_test`.`fatura` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `idConta` INT(11) NOT NULL,
   `status` VARCHAR(100) NOT NULL,
@@ -72,12 +72,12 @@ CREATE TABLE IF NOT EXISTS `gamabank`.`fatura` (
   `valorPago` DOUBLE NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `idConta` (`idConta` ASC),
-  CONSTRAINT `fatura_ibfk_1` FOREIGN KEY (`idConta`) REFERENCES `gamabank`.`conta` (`id`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = latin1;
+  CONSTRAINT `fatura_ibfk_1` FOREIGN KEY (`idConta`) REFERENCES `gamabank_test`.`conta` (`id`)
+) ENGINE = Memory DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
--- Table `gamabank`.`lancamentos`
+-- Table `gamabank_test`.`lancamentos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `gamabank`.`lancamentos` (
+CREATE TABLE IF NOT EXISTS `gamabank_test`.`lancamentos` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `idConta` INT(11) NOT NULL,
   `data` DATE NOT NULL,
@@ -86,21 +86,21 @@ CREATE TABLE IF NOT EXISTS `gamabank`.`lancamentos` (
   `valor` DOUBLE NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `idConta` (`idConta` ASC),
-  CONSTRAINT `lancamentos_ibfk_1` FOREIGN KEY (`idConta`) REFERENCES `gamabank`.`conta` (`id`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = latin1;
+  CONSTRAINT `lancamentos_ibfk_1` FOREIGN KEY (`idConta`) REFERENCES `gamabank_test`.`conta` (`id`)
+) ENGINE = Memory DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
--- Table `gamabank`.`transacoescredito`
+-- Table `gamabank_test`.`transacoescredito`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `gamabank`.`transacoescredito` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `gamabank_test`.`transacoescredito` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `idFatura` INT(11) NOT NULL,
   `data` DATE NOT NULL,
   `descricao` VARCHAR(255) NOT NULL,
   `valor` DOUBLE NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `idFatura` (`idFatura` ASC),
-  CONSTRAINT `transacoescredito_ibfk_1` FOREIGN KEY (`idFatura`) REFERENCES `gamabank`.`fatura` (`id`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = latin1;
+  CONSTRAINT `transacoescredito_ibfk_1` FOREIGN KEY (`idFatura`) REFERENCES `gamabank_test`.`fatura` (`id`)
+) ENGINE = Memory DEFAULT CHARACTER SET = latin1;
 SET SQL_MODE = @OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS;
