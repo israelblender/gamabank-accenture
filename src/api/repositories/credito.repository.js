@@ -36,7 +36,7 @@ const updateAvaliableCredit = async (accoutId, new_avaliable_credit) => {
 
 const addTransaction = async (invoiceId, date, description, value) => {
   const transaction = await database.execute(
-    `INSERT INTO transacoesCredito(idFatura, data, descricao, valor)
+    `INSERT INTO transacoescredito(idFatura, data, descricao, valor)
     VALUES (${invoiceId}, '${date}', '${description}', ${value})`
   );
   return transaction;
@@ -44,7 +44,7 @@ const addTransaction = async (invoiceId, date, description, value) => {
 
 const findTransactionsByInvoiceId = async (invoiceId) => {
   const transaction = await database.execute(
-    `SELECT * FROM transacoesCredito WHERE idFatura= ${invoiceId}`
+    `SELECT * FROM transacoescredito WHERE idFatura= ${invoiceId}`
   );
   return transaction;
 };

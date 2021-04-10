@@ -19,6 +19,7 @@ const BuyDebitResponseDTO = Joi.object({
 const BuyCreditRequestDTO = Joi.object({
   value: Joi.string().required(),
   installment: Joi.number().required(),
+  description: Joi.string().required()
 }).label("BuyCreditRequestDTO");
 
 const BuyCreditHeaderDTO = Joi.object()

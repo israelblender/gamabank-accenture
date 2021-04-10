@@ -12,7 +12,7 @@ const findContaByUserId = async (idUsuario) => {
 
 const findAccountByEmail = async (email) => {
   const user = await database.execute(
-    `SELECT * FROM usuario WHERE email='${email}'`
+    `SELECT u.id, c.id as idConta FROM usuario as u INNER join conta as c ON u.id = c.idUsuario WHERE email='${email}'; `
   );
 
   return user[0];

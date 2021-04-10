@@ -6,7 +6,7 @@ const depositService = require('../services/deposit.service')
 
     const { userId } = await request.auth.credentials;
 
-    const updateBalance = await depositService.uptadeBalanceAsHolder(
+    const updateBalance = await depositService.updateBalanceAsHolder(
         userId,
         value
     )
@@ -19,10 +19,10 @@ const depositService = require('../services/deposit.service')
 
     const { cpf, email,  value} = request.payload;
 
-    const updateBalance = await depositService.uptadeBalanceAsNotHolder(
+    const updateBalance = await depositService.updateBalanceAsNotHolder(
         cpf,
-        value,
-        email
+        email,
+        value
     )
 
     return updateBalance;

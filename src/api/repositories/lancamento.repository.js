@@ -20,22 +20,22 @@ const extratoByContaId = async (accountId, dt_inicial, dt_final) => {
 
 const createNewLaunchPay = async (idAccount, cpf, value) => {
     const data = new Date();
-    const tipo = 'PAGAMENTO';
-    const descricao = `Pagamento em débito pelo cpf: ${cpf}`;
+    const tipo = 'DÉBITO';
+    const descricao = `Pagamento débito em conta`;
 
     const newLaunch = await database.execute(
-        `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString('en-US')}', '${tipo}','${descricao}','${value}')`
+        `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString('en-CA')}', '${tipo}','${descricao}','${value}')`
     );
     return newLaunch
 }
 
-const createNewLaunchDebit = async (idAccount, cpf, value) => {
+const createNewLaunchDebit = async (idAccount, value) => {
     const data = new Date();
-    const tipo = 'DÉBITO';
-    const descricao = `Déposito em conta do correntista pelo cpf: ${cpf}`;
+    const tipo = 'CRÉDITO';
+    const descricao = `Déposito em conta do correntista`;
 
     const newLaunch = await database.execute(
-        `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString('en-US')}', '${tipo}','${descricao}','${value}')`
+        `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString('en-CA')}', '${tipo}','${descricao}','${value}')`
     );
 
     return newLaunch

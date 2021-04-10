@@ -11,11 +11,11 @@ const payWithDebit = async (request, h) => {
 
 const payWithCredit = async (request, h) => {
   const { userId } = await request.auth.credentials;
-  const { value, installment } = request.payload;
+  const { value, installment, description } = request.payload;
 
   const pay = await payService.payWithCredit(
     userId,
-    "Pizza Família Big Bom Preço",
+    description,
     value,
     installment
   );

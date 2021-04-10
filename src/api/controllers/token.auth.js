@@ -1,11 +1,12 @@
 const JWT = require("jsonwebtoken");
 const userRepository = require("../repositories/user.repository");
+const secret = process.env.SECRET;
 
 const generate = (userData) =>
   new Promise((resolve) => {
     JWT.sign(
       userData,
-      "keytest",
+      secret,
       { algorithm: "HS256", expiresIn: "20m" },
       (err, token) => {
         if (err) {

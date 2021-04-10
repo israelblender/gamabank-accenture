@@ -1,7 +1,7 @@
 const contaRepository = require("../repositories/conta.repository");
 const lancamentoRepository = require("../repositories/lancamento.repository");
 const userRepository = require("../repositories/user.repository");
-const validarCPF = require("../../helpers/cpf.helper");
+const { validateCpf} = require("../../helpers/cpf.helper");
 const validarEmail = require("email-validator");
 const { sendMessage } = require("../../helpers/nodemailer");
 const Boom = require("@hapi/boom");
@@ -26,22 +26,17 @@ const updateBalanceAsHolder = async (userId, value) => {
   const cpfUser = await userRepository.findUserById(userId).cpf;
   const idAccount = await findAccount.id;
 
-  if(!(validarCPF(cpf))) {
-
-    return Boom.conflict('CPF inválido');
-  }
-
-  await lancamentoRepository.createNewLaunchDebit(idAccount, cpfUser, valueAdd);
+  await lancamentoRepository.createNewLaunchDebit(idAccount, valueAdd);
 
   const atualBalance = findAccount.saldo;
 
-  let valueAfterDepit = parseFloat(atualBalance) + valueAdd;
+  let valueAfterDebit = parseFloat(atualBalance) + valueAdd;
   
-  await contaRepository.updateBalanceAccount(userId, valueAfterDepit);
+  await contaRepository.updateBalanceAccount(userId, valueAfterDebit);
 
   const findEmailByUser = await userRepository.findUserById(userId).email;
 
-  await sendMessage(findEmailByUser, `Depósito realizado com sucesso com valor de R$ ${value}`);
+  //await sendMessage(findEmailByUser, `Depósito realizado com sucesso com valor de R$ ${value}`);
   
   return {
 
@@ -74,7 +69,7 @@ const updateBalanceAsNotHolder = async (cpf, email, value) => {
     return Boom.conflict('Valor não pode ser depositado');
   }
   
-  if(!(validarCPF(cpf))) {
+  if(!(validateCpf(cpf))) {
 
      return Boom.conflict('CPF inválido');
   }
@@ -83,12 +78,12 @@ const updateBalanceAsNotHolder = async (cpf, email, value) => {
 
   const atualBalance = findAccount.saldo;
 
-  let valueAfterDepit = parseFloat(atualBalance) + valueAdd;
+  let valueAfterDebit = parseFloat(atualBalance) + valueAdd;
 
-  await contaRepository.updateBalanceAccount(userId, valueAfterDepit);
+  await contaRepository.updateBalanceAccount(userId, valueAfterDebit);
 
   // enviar email p avisar q deposito chegou
-  await sendMessage(email, `Depósito realizado com sucesso pelo cpf:${cpf} com valor de R$ ${value}`);
+  //await sendMessage(email, `Depósito realizado com sucesso pelo cpf:${cpf} com valor de R$ ${value}`);
   
   return {
 

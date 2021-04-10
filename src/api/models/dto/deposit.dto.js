@@ -21,12 +21,14 @@ const DepositHeaderDTO = Joi.object().keys({
 }).options({ allowUnknown: true })
 
     
-const DepositResponseDTO = Joi.string().label("DepositResponseDTO");
+const DepositResponseDTO = Joi.object({
+    message: 'Depósito realizado com sucesso'
+}).label("DepositResponseDTO");
 
 
-  module.exports = (
+  module.exports = {
       DepositNotHolderRequestDTO,
       DepositHolderRequestDTO,
       DepositResponseDTO,
       DepositHeaderDTO
-  )
+  }
