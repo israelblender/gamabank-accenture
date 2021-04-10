@@ -1,35 +1,31 @@
-const depositService = require('../services/deposit.service')
+const depositService = require("../services/deposit.service");
 
-  const depositAsHolder = async (request, h) => {
+const depositAsHolder = async (request, h) => {
+  const { value } = request.payload;
 
-    const { value} = request.payload;
+  const { userId } = await request.auth.credentials;
 
-    const { userId } = await request.auth.credentials;
+  const updateBalance = await depositService.updateBalanceAsHolder(
+    userId,
+    value
+  );
 
-    const updateBalance = await depositService.uptadeBalanceAsHolder(
-        userId,
-        value
-    )
+  return updateBalance;
+};
 
-    return updateBalance;
+const depositAsNotHolder = async (request, h) => {
+  const { cpf, email, value } = request.payload;
 
-  }
+  const updateBalance = await depositService.updateBalanceAsNotHolder(
+    cpf,
+    value,
+    email
+  );
 
-  const depositAsNotHolder = async (request, h) => {
+  return updateBalance;
+};
 
-    const { cpf, email,  value} = request.payload;
-
-    const updateBalance = await depositService.uptadeBalanceAsNotHolder(
-        cpf,
-        value,
-        email
-    )
-
-    return updateBalance;
-
-  }
-
-  module.exports = {
-    depositAsHolder,
-    depositAsNotHolder
-  }
+module.exports = {
+  depositAsHolder,
+  depositAsNotHolder,
+};
