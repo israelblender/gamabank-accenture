@@ -7,7 +7,7 @@ const InvoiceTransactionRequestDto = Joi.object({
 const InvoiceTransactionResponseDto = Joi.object({
   mesReferencia: Joi.string().required(),
   valorFatura: Joi.number().required(),
-  Transações: Joi.array(),
+  transacoes: Joi.array(),
 }).label("CreateUserResponseDTO");
 
 module.exports = {

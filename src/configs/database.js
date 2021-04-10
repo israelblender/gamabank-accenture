@@ -26,8 +26,8 @@ const execute = (sqlStatement) => {
 
 const rollback = async () => {
   const object = [
-    "fatura",
     "transacoescredito",
+    "fatura",
     "lancamentos",
     "credito",
     "conta",

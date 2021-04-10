@@ -39,11 +39,11 @@ const transferIntern = async (id, email, valor) => {
     let valorDebit = parseFloat(verifySaldo.saldo) - valorC;
     let valorCredit = parseFloat(saldoContaDestiny.saldo) + valorC;
     
-    await contaRepository.alterSaldoConta(id, valorDebit);
+    await contaRepository.updateBalanceAccount(id, valorDebit);
     
     await lancamentoRepository.register(findContaDestiny.id, 'transferência', `Transferência recebida do ${userAccount.email}`, valorC);
     
-    await contaRepository.alterSaldoConta(saldoContaDestiny.id, valorCredit);
+    await contaRepository.updateBalanceAccount(saldoContaDestiny.id, valorCredit);
     
     await sendMessage(userAccount.email, `Transferência para ${email}, R$ ${valor}`);
     

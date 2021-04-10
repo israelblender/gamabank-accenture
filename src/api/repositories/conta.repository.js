@@ -6,6 +6,7 @@ const findContaByUserId = async (idUsuario) => {
   );
 
   // retorna o primeiro usuario encontrado
+  console.log(account[0]);
   return account[0];
 };
 

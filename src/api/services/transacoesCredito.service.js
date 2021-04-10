@@ -23,7 +23,7 @@ const getTransacoesFatura = async (accountId, mesReferencia = "2021-04") => {
     return {
       mesReferencia: getOpenInvoice.mesReferencia,
       valorFatura: getOpenInvoice.valorConsolidado,
-      Transações: getTransacoes,
+      transacoes: getTransacoes,
     };
   } catch (error) {
     console.log(error);
