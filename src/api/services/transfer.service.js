@@ -9,8 +9,12 @@ const Boom = require("@hapi/boom");
 const transferIntern = async (id, email, valor) => {
   try {
     
-    const findContaDestiny = await contaRepository.findContaByUserEmail(email);
-    const valorC = parseFloat(valor);
+  const findContaDestiny = await contaRepository.findAccountByEmail(email);
+  const valorC = parseFloat(valor);
+  
+  if(findContaDestiny === undefined){
+    return Boom.badRequest('E-mail inválido, correntista não encontrado');
+  };
     
     if(findContaDestiny === undefined){
       return Boom.badRequest('E-mail inválido, correntista não encontrado');
@@ -35,18 +39,18 @@ const transferIntern = async (id, email, valor) => {
     let valorDebit = parseFloat(verifySaldo.saldo) - valorC;
     let valorCredit = parseFloat(saldoContaDestiny.saldo) + valorC;
     
-    await contaRepository.alterSaldoConta(id, valorDebit);
+    await contaRepository.updateBalanceAccount(id, valorDebit);
     
     await lancamentoRepository.register(findContaDestiny.id, 'transferência', `Transferência recebida do ${userAccount.email}`, valorC);
     
-    await contaRepository.alterSaldoConta(saldoContaDestiny.id, valorCredit);
+    await contaRepository.updateBalanceAccount(saldoContaDestiny.id, valorCredit);
     
     await sendMessage(userAccount.email, `Transferência para ${email}, R$ ${valor}`);
     
     await sendMessage(email, `Transferência recebida do ${userAccount.email}, R$ ${valor}`);
     
     return 'Transferência realizada com sucesso';
-
+  
   } catch (error) {
     console.log(error);
     return Boom.serverUnavailable('Serviço indisponível');
@@ -55,7 +59,7 @@ const transferIntern = async (id, email, valor) => {
   
 const transferExtern = async (id, codigoBanco, cpf, valor) => {
 
-  try {
+  try { 
     const cpfV = await validateCpf(cpf);
     
     if(cpfV == false){

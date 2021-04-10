@@ -18,4 +18,27 @@ const extratoByContaId = async (accountId, dt_inicial, dt_final) => {
     return result
 }
 
-module.exports = { register, extratoByContaId };
+const createNewLaunchPay = async (idAccount, cpf, value) => {
+    const data = new Date();
+    const tipo = 'PAGAMENTO';
+    const descricao = `Pagamento em débito pelo cpf: ${cpf}`;
+
+    const newLaunch = await database.execute(
+        `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString('en-US')}', '${tipo}','${descricao}','${value}')`
+    );
+    return newLaunch
+}
+
+const createNewLaunchDebit = async (idAccount, cpf, value) => {
+    const data = new Date();
+    const tipo = 'DÉBITO';
+    const descricao = `Déposito em conta do correntista pelo cpf: ${cpf}`;
+
+    const newLaunch = await database.execute(
+        `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString('en-US')}', '${tipo}','${descricao}','${value}')`
+    );
+
+    return newLaunch
+}
+
+module.exports = { register, createNewLaunchPay, createNewLaunchDebit, extratoByContaId };

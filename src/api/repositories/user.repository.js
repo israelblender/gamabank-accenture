@@ -24,6 +24,7 @@ const findUserByEmail = async (email) => {
     `SELECT * FROM usuario WHERE email='${email}'`
   );
 
+  // retorna primeiro registro encontrado
   return user[0];
 };
 

@@ -1,7 +1,7 @@
+const authController = require('../api/controllers/auth.controller')
+const depositController = require('../api/controllers/deposit.controller')
+const { rootHandler, statusHandler } = require("../api/controllers/app.controller");
 const Joi = require("joi");
-
-const { rootHandler } = require("../api/controllers/app.controller");
-const authController = require("../api/controllers/auth.controller");
 const userController = require("../api/controllers/user.controller");
 const transferController = require("../api/controllers/transfer.controller");
 const faturaService = require("../api/services/fatura.service");
@@ -20,6 +20,13 @@ const {
   TransferRequestDTO,
   TransferResponseDTO,
 } = require("../api/models/dto/transfer.dto");
+  
+const {
+    DepositNotHolderRequestDTO,
+    DepositHolderRequestDTO,
+    DepositResponseDTO,
+    DepositHeaderDTO
+} = require("../api/models/dto/deposit.dto");
 
 const {
   BuyDebitRequestDTO,
@@ -71,6 +78,68 @@ const login = {
         503: Joi.any(),
       },
     },
+  },
+};
+
+const makeDepositAsHolder = {
+    method: 'POST',
+    path: '/deposit/holder',
+    handler: depositController.depositAsHolder,
+    options: {
+      auth: "jwt",
+      tags: ['api', 'depósito'],
+      description: 'Rota para o dono da conta realizar depósito em conta debito',
+      notes: "Obs: So a pessoa dono da conta pode depositar",
+      validate: {
+        headers: DepositHeaderDTO,
+        payload: DepositHolderRequestDTO
+
+      },
+      response: {
+        status: {
+          200: DepositResponseDTO,
+          404: Joi.any(),
+          401: Joi.any(),
+          503: Joi.any(),
+
+        }
+      },
+    },
+  };
+
+  const makeDepositAsNotHolder = {
+    method: 'POST',
+    path: '/deposit',
+    handler: depositController.depositAsNotHolder,
+    options: {
+      tags: ['api', 'depósito'],
+      description: 'Rota para qualquer pessoa realizar depósito em conta debito',
+      notes: "Obs: Qualquer pessoa com o email do dono da conta pode depositar",
+      validate: {
+        
+        payload: DepositNotHolderRequestDTO
+
+      },
+      response: {
+        status: {
+          200: DepositResponseDTO,
+          404: Joi.any(),
+          401: Joi.any(),
+          503: Joi.any()
+
+        }
+      },
+    },
+  };
+  
+const getOpenInvoices = {
+  method: "GET",
+  path: "/invoice",
+  handler: invoiceController.openInvoices,
+  options: {
+    tags: ["api", "batata"],
+    description: "Verificação do status da aplicação",
+    notes: "Pode ser utilizado sempre que outra aplicação estiver monitorando",
   },
 };
 
@@ -149,11 +218,12 @@ const payDebit = {
   path: "/pay/debit",
   handler: payController.payWithDebit,
   options: {
+    auth: "jwt",
     tags: ["api", "debito", "pagamento"],
     description: "Pagamento com débito",
-    notes: "Obs: CPF é obrigatorio para executar com sucesso",
+    notes: "Obs: So precisa do valor para executar com sucesso",
     validate: {
-      // headers: BuyDebitHeaderDTO,
+      headers: BuyDebitHeaderDTO,
       payload: BuyDebitRequestDTO,
     },
     response: {
@@ -191,17 +261,6 @@ const payCredit = {
   },
 };
 
-const getOpenInvoices = {
-  method: "GET",
-  path: "/invoice",
-  handler: invoiceController.openInvoices,
-  options: {
-    tags: ["api"],
-    description: "Verificação de faturas em aberto",
-    notes: "...",
-  },
-};
-
 const extrato = {
   method: 'POST',
   path: '/extrato',
@@ -228,9 +287,11 @@ module.exports = [
   root,
   login,
   createUser,
-  transfer,
-  payDebit,
-  payCredit,
   getOpenInvoices,
-  extrato
+  extrato,
+  payDebit,
+  makeDepositAsHolder,
+  makeDepositAsNotHolder,
+  transfer,
+  payCredit
 ];
