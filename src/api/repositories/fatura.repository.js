@@ -1,8 +1,8 @@
 const database = require("../../configs/database");
 
-const findFaturaAbertaByIdConta = async (idConta) => {
+const findOpenedInvoiceByAccountId = async (accountId) => {
   const fatura = await database.execute(
-    `SELECT * FROM fatura WHERE idConta='${idConta}' AND status='Aberta' order by mesReferencia desc limit 1`
+    `SELECT * FROM fatura WHERE idConta='${accountId}' AND status='Aberta'`
   );
 
   // retorna primeiro registro encontrado
@@ -52,7 +52,7 @@ const updateInvoiceValueConsolidation = async (
 };
 
 module.exports = {
-  findFaturaAbertaByIdConta,
+  findOpenedInvoiceByAccountId,
   findInvoiceSpecific,
   createInvoiceSpecific,
   updateInvoiceValueConsolidation,

@@ -43,7 +43,6 @@ describe('Validar o service de transferencia', async() => {
             assert.equal(transfer, 'Error: Código do banco inválido');
         });
 
-        
         it('Deve retornar saldo insuficiente', async () => {
             const transfer = await transferExtern(1, "104", "73761560036", 2000000000);
             assert.equal(transfer, 'Error: Saldo insuficiente');

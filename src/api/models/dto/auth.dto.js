@@ -14,8 +14,6 @@ const LoginResponseSuccessDTO = joi
   })
   .label("LoginResponseSuccessDTO");
 
-//Tentativa de login não autorizada com username ou pass incorreto
-
 module.exports = {
   LoginRequestDTO,
   LoginResponseSuccessDTO,

@@ -1,8 +1,10 @@
-const invoiceRepository = require("../repositories/fatura.repository");
+const faturaRepository = require("../repositories/fatura.repository");
 
 const createFatura = async (idConta) => {
   // verifico se a conta já possui fatura aberta
-  const findFatura = await faturaRepository.findFaturaAbertaByIdConta(idConta);
+  const findFatura = await faturaRepository.findOpenedInvoiceByAccountId(
+    idConta
+  );
 
   // caso exista retorno a fatura e retorno
   if (findFatura) {
@@ -19,10 +21,19 @@ const createFatura = async (idConta) => {
   };
 };
 
+const getOpenInvoice = async (accountId) => {
+  const findFatura = await faturaRepository.findOpenedInvoiceByAccountId(
+    accountId
+  );
+  // caso exista retorno a fatura e retorno
+
+  return findFatura;
+};
+
 //Obtem fatura em aberto se existir
 const findInvoiceSpecific = async (accountId, referenceMonth) => {
   //Obtem fatura
-  const invoice = await invoiceRepository.findInvoiceSpecific(
+  const invoice = await faturaRepository.findInvoiceSpecific(
     accountId,
     referenceMonth
   );
@@ -31,7 +42,7 @@ const findInvoiceSpecific = async (accountId, referenceMonth) => {
 };
 
 const createInvoiceSpecific = async (accountId, referenceMonth, status) => {
-  const invoice = await invoiceRepository.createInvoiceSpecific(
+  const invoice = await faturaRepository.createInvoiceSpecific(
     accountId,
     referenceMonth,
     status
@@ -43,7 +54,7 @@ const updateInvoiceValueConsolidation = async (
   invoiceId,
   valueConsolidation
 ) => {
-  const invoice = await invoiceRepository.updateInvoiceValueConsolidation(
+  const invoice = await faturaRepository.updateInvoiceValueConsolidation(
     invoiceId,
     valueConsolidation
   );
@@ -52,6 +63,7 @@ const updateInvoiceValueConsolidation = async (
 
 module.exports = {
   createFatura,
+  getOpenInvoice,
   findInvoiceSpecific,
   createInvoiceSpecific,
   updateInvoiceValueConsolidation,

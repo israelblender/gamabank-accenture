@@ -1,9 +1,13 @@
 const lancamentoRepository = require("../repositories/lancamento.repository");
 const contaRepository = require("../repositories/conta.repository");
-const validarCPF = require("../../helpers/cpf.helper");
+const { validateCpf } = require("../../helpers/cpf.helper");
 const Boom = require("@hapi/boom");
 const { sendMessage } = require("../../helpers/nodemailer");
 const userRepository = require("../repositories/user.repository");
+const creditRepository = require("../repositories/credito.repository");
+const { calcMonthReference, dateCurrent } = require("../../helpers/date.helper");
+const invoiceService = require("../repositories/fatura.repository");
+
 
 const payWithDebit = async (userId, value) => {
     
@@ -14,7 +18,7 @@ const payWithDebit = async (userId, value) => {
     return Boom.badRequest('Id inválido, correntista não encontrado');
   };
 
-  if(valuAdd <= 0) {
+  if(valueAdd <= 0) {
 
       return Boom.conflict('Valor para pagamento inválido')
   }
@@ -30,7 +34,7 @@ const payWithDebit = async (userId, value) => {
   const idAccount = findAccount.id;
   const findCpfById = await userRepository.findUserById(userId).cpf;
 
-  if(!(validarCPF(findCpfById))) {
+  if(!(validateCpf(findCpfById))) {
 
     return Boom.badRequest('CPF inválido');
   }
@@ -55,7 +59,7 @@ const payWithDebit = async (userId, value) => {
 
 //Pagamento com crédito
 const payWithCredit = async (userId, description, value, installments = 1) => {
-  const findAccount = await accountRepository.findContaByUserId(userId);
+  const findAccount = await contaRepository.findContaByUserId(userId);
   const valuePay = parseFloat(value);
 
   if (findAccount === undefined) {
@@ -147,7 +151,3 @@ module.exports = {
   payWithDebit,
   payWithCredit,
 };
-
-module.exports = {
-  payWithDebit
-}
