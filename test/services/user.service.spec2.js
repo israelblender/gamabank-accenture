@@ -16,6 +16,7 @@ describe("User service", async () => {
   afterEach(async () => {
     await database.rollback();
   });
+  
 
   it("É possivel criar um usuario", async () => {
     const newUser = await userService.createUser(
