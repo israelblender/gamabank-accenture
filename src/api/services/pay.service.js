@@ -43,7 +43,9 @@ const payWithDebit = async (userId, value) => {
     
   let restValue = parseFloat(findAccount.saldo) - valueAdd;
   
-  await contaRepository.updateBalanceAccount(idAccount, restValue);
+  const findIdByUser = await userRepository.findUserById(userId).id;
+
+  await contaRepository.updateBalanceAccount(findIdByUser, restValue);
 
   const findEmailByUser = findAccount.email;
 
