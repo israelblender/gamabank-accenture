@@ -28,7 +28,7 @@ const payWithDebit = async (userId, value) => {
     }
 
     if((parseFloat(findAccount.saldo) - valueAdd) < 0) {
-      return Boom.conflit('Pagamento nao pode ser efetuado')
+      return Boom.unauthorized('Pagamento nao pode ser efetuado')
     }
 
     const idAccount = findAccount.id;
