@@ -14,6 +14,7 @@ const execute = (sqlStatement) => {
   return new Promise((resolve, reject) => {
     connection.query(sqlStatement, (err, result) => {
       if (err) {
+        return reject(err);
         reject(err.sqlMessage);
       } else return resolve(result);
     });

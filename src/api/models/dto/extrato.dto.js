@@ -1,9 +1,8 @@
 const joi = require('joi')
 
 const ExtratoRequestDTO = joi.object({
-    conta: joi.number().required(),
-    data_inicial: joi.string().max(10).required().default(new Date()),
-    data_final: joi.string().max(10).required().default(new Date())
+    data_inicial: joi.string().max(10),
+    data_final: joi.string().max(10)
 }).label('ExtratoRequestDTO')
 
 const ExtratoResponseSuccessDTO = joi.object({

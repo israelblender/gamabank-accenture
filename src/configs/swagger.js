@@ -7,7 +7,7 @@ const swagger = {
     options: {
       info: {
         title: 'Gamabank - NoDesign',
-        description: 'Api para prestação de serviços bancários para correntistas',
+        description: 'Nossa Fintech tem objetivo simplificar a vida dos nossos clientes, todos os problemas são resolvidos dentro da aplicação acabando com filas e aglomerações.',
         version: '1.0'
       }
     }
