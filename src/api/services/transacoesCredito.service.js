@@ -1,22 +1,34 @@
 const database = require("../../configs/database");
+const Boom = require("@hapi/boom");
 const invoiceService = require("../services/fatura.service");
 const transacoesCreditoRepository = require("../repositories/transacoesCredito.repository");
 
 const getTransacoesFatura = async (accountId, mesReferencia = "2021-04") => {
-  const getOpenInvoice = await invoiceService.findInvoiceSpecific(
-    accountId,
-    mesReferencia
-  );
+  try {
+    const getOpenInvoice = await invoiceService.findInvoiceSpecific(
+      accountId,
+      mesReferencia
+    );
 
-  const getTransacoes = await transacoesCreditoRepository.getTransacoesByInvoiceId(
-    getOpenInvoice.id
-  );
+    console.log(getOpenInvoice);
 
-  return {
-    "Mes Referencia": getOpenInvoice.mesReferencia,
-    "Valor Atual da fatura": getOpenInvoice.valorConsolidado,
-    transacoes: getTransacoes,
-  };
+    if (!getOpenInvoice) {
+      return Boom.notFound("Cliente não possuí fatura em aberto");
+    }
+
+    const getTransacoes = await transacoesCreditoRepository.getTransacoesByInvoiceId(
+      getOpenInvoice.id
+    );
+
+    return {
+      "Mes de referencia": getOpenInvoice.mesReferencia,
+      "Valor da fatura": getOpenInvoice.valorConsolidado,
+      Transações: getTransacoes,
+    };
+  } catch (error) {
+    console.log(error);
+    return Boom.notFound("Erro desconhecido");
+  }
 };
 
 module.exports = { getTransacoesFatura };

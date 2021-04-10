@@ -26,7 +26,7 @@ const getOpenInvoice = async (accountId) => {
     accountId
   );
   // caso exista retorno a fatura e retorno
-  console.log(findFatura);
+
   return findFatura;
 };
 
@@ -42,7 +42,7 @@ const findInvoiceSpecific = async (accountId, referenceMonth) => {
 };
 
 const createInvoiceSpecific = async (accountId, referenceMonth, status) => {
-  const invoice = await invoiceRepository.createInvoiceSpecific(
+  const invoice = await faturaRepository.createInvoiceSpecific(
     accountId,
     referenceMonth,
     status

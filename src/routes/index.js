@@ -6,7 +6,7 @@ const userController = require("../api/controllers/user.controller");
 const transferController = require("../api/controllers/transfer.controller");
 const payController = require("../api/controllers/pay.controller");
 const paymentController = require("../api/controllers/payment.controller");
-const transacoesCreditoController = require("../api/controllers/transacoesCredito.controller");
+const faturaController = require("../api/controllers/fatura.controller");
 
 const {
   LoginRequestDTO,
@@ -25,6 +25,11 @@ const {
   CreateUserDTO,
   CreateUserResponseDTO,
 } = require("../api/models/dto/user.dto");
+
+const {
+  InvoiceTransactionRequestDto,
+  InvoiceTransactionResponseDto,
+} = require("../api/models/dto/invoiceTransaction.dto copy");
 
 const root = {
   method: "GET",
@@ -81,15 +86,28 @@ const createUser = {
   },
 };
 
-const getInvoiceTransactions = {
+const invoices = {
   method: "POST",
   path: "/invoice",
-  handler: transacoesCreditoController.findTransactions,
+  handler: faturaController.getInvoice,
   options: {
     auth: "jwt",
     tags: ["api", "Invoices"],
-    description: "Verificação do status da aplicação",
-    notes: "Pode ser utilizado sempre que outra aplicação estiver monitorando",
+    description: "Rota Buscar faturas por mes de referencia",
+    notes:
+      "Rota para buscar transações do mes referente, caso não informar o mes de referencia, será retornado a fatura em aberto do mes atual",
+    validate: {
+      payload: InvoiceTransactionRequestDto,
+      headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
+    },
+    response: {
+      status: {
+        200: InvoiceTransactionResponseDto,
+        400: Joi.any(),
+        401: Joi.any(),
+        503: Joi.any(),
+      },
+    },
   },
 };
 
@@ -195,5 +213,5 @@ module.exports = [
   transfer,
   payDebit,
   payCredit,
-  getInvoiceTransactions,
+  invoices,
 ];

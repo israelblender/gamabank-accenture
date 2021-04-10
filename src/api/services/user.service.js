@@ -12,21 +12,18 @@ const createUser = async (nome, cpf, email, senha, telefone) => {
   const validaCpf = await cpfHelper.validateCpf(cpf);
 
   if (!validaCpf) {
-    console.log("CPF invalido");
     throw Boom.badRequest("CPF INVALIDO");
   }
 
   const valideEmail = await checkEmail(email);
 
   if (!valideEmail) {
-    console.log("Email invalido");
     throw Boom.badRequest("Email INVALIDO");
   }
 
   const validePhone = await checkPhone(telefone);
 
   if (!validePhone) {
-    console.log("Telefone invalido");
     throw Boom.badRequest("Telefone INVALIDO");
   }
 
@@ -35,7 +32,6 @@ const createUser = async (nome, cpf, email, senha, telefone) => {
 
   // caso exista retorno erro
   if (findUser) {
-    console.log("CPF duplicado");
     throw Boom.badRequest("CPF Duplicado");
   }
 
