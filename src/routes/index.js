@@ -20,7 +20,6 @@ const {
 
 const {
   TransferRequestDTO,
-  TransferResponseDTO,
 } = require("../api/models/dto/transfer.dto");
 
 const {
