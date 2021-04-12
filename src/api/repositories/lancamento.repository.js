@@ -5,7 +5,7 @@ const register = async (id, tipo, descricao, valor) => {
 
   const register = await database.execute(
     `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${id}', '${data.toLocaleDateString(
-      "en-US"
+      "en-CA"
     )}', '${tipo}','${descricao}','${valor}')`
   );
 
@@ -26,7 +26,7 @@ const createNewLaunchPay = async (idAccount, value) => {
 
   const newLaunch = await database.execute(
     `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString(
-      "en-US"
+      "en-CA"
     )}', '${tipo}','${descricao}','${value}')`
   );
   return newLaunch;
@@ -38,7 +38,7 @@ const createNewLauchDeposit = async (idAccount, description, value) => {
 
   const newLaunch = await database.execute(
     `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString(
-      "en-US"
+      "en-CA"
     )}', '${tipo}','${description}','${value}')`
   );
 
