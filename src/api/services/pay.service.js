@@ -65,7 +65,7 @@ const payWithCredit = async (accountId, description, value, installments) => {
   const valuePay = parseFloat(value);
 
   if (valuePay < 0) {
-    return Boom.badRequest("Valor inválido para pagamento");
+    return Boom.badRequest("Valor inválido");
   }
 
   const creditUser = await creditRepository.getAvaliableCredit(accountId);

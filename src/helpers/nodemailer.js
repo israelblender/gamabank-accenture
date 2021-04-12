@@ -32,9 +32,7 @@ const sendMessage = (email, description) => {
         } else return resolve(true);
       }
     );
-  }).catch((err) => {
-    console.log(err);
-  });
+  }).catch((err) => {});
 };
 
 module.exports = { sendMessage };

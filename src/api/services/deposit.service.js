@@ -40,7 +40,9 @@ const updateBalanceAsNotHolder = async (cpf, email, value) => {
     return Boom.conflict("EMAIL inválido");
   }
 
-  if (!validateCpf(cpf)) {
+  const validaCpf = await validateCpf(cpf);
+
+  if (!validaCpf) {
     return Boom.conflict("CPF inválido");
   }
 

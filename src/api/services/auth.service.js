@@ -27,7 +27,7 @@ const signIn = async ({ email, senha }) => {
 
   if (!findUser) {
     // erro
-    throw Boom.forbidden("Usuario não encontrado");
+    return Boom.forbidden("Usuario não encontrado");
   }
 
   const passwordIsValid = await bcrypt.comparePassword(
@@ -37,7 +37,7 @@ const signIn = async ({ email, senha }) => {
   );
 
   if (!passwordIsValid) {
-    throw Boom.forbidden("Senha incorreta");
+    return Boom.forbidden("Senha incorreta");
   }
 
   const userAccount = await accountRepository.findAccountByUserId(findUser.id);
