@@ -12,7 +12,7 @@
   - [Ana Carolina](https://github.com/anacarolinacv)
   - [Bruno Augusto](https://github.com/BrunoAgst)
   - [Israel Blender](https://github.com/israelblender)
-  - [Matheus Gonçalves](any)
+  - [Matheus Gonçalves](https://github.com/mgsantos177)
 
 ## O que é?
 
@@ -54,7 +54,7 @@ Api Server para solução rápida, segura e legível com serviços de controle p
 
 * Inicialize o projeto com o comando:
 
-    ```npm run start-dev``` ou ```node app.js```
+    ```npm run start-dev``` ou ```npm run start```
 
 * URI Principal:
 

@@ -1,4 +1,3 @@
-const database = require("../../configs/database");
 const Boom = require("@hapi/boom");
 const invoiceService = require("../services/fatura.service");
 const transacoesCreditoRepository = require("../repositories/transacoesCredito.repository");
@@ -27,7 +26,7 @@ const getTransacoesFatura = async (accountId, mesReferencia = "2021-04") => {
     };
   } catch (error) {
     console.log(error);
-    return Boom.notFound("Erro desconhecido");
+    return Boom.serverUnavailable("Serviço indisponível");
   }
 };
 

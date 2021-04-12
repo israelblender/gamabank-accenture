@@ -184,7 +184,7 @@ const transfer = {
     tags: ["api", "transfer"],
     description: "Realização de transferência entre contas",
     notes:
-      "É possível fazer transferência para correntistas do Gamabank ou correntistas de outro banco, para correntistas do mesmo banco basta informar o e-mail e valor, correntistas de outro banco basta informar um CPF válido, código do banco e valor.",
+      "É possível fazer transferência para correntistas do Gamabank ou correntistas de outro banco, para correntistas do Gamabank basta informar o e-mail e valor, correntistas de outro banco basta informar um CPF válido, código do banco e valor.",
     validate: {
       headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
       payload: TransferRequestDTO,
@@ -280,7 +280,7 @@ const extrato = {
     auth: "jwt",
     description: "Exibir saldo/extrato da conta",
     notes:
-      "Retorna objeto json contendo lançamentos da conta conforme critérios",
+      "Caso não for informado um range data, será retornado as transações de hoje e o período máximo para consulta é de 3 meses",
     validate: {
       headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
       payload: ExtratoRequestDTO,
