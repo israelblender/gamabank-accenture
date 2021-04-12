@@ -11,9 +11,6 @@ const extrato = async (request, h) => {
   
     const { accountId, userId } = await request.auth.credentials
 
-    //Saldo deve exibir movimentos do dia + saldo disponivel
-    //Data Final não pode ser superior a data atual
-    //Limite do extrato é de 3 meses
     conta = await contaRepository.findContaByUserId(userId)
 
     if (!dt_inicial && !dt_final) {

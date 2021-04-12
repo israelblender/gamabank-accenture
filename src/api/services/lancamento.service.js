@@ -14,6 +14,10 @@ const extratoService = async (userId, dt_inicial, dt_final) => {
         return Boom.badRequest('Data inicial não pode ser maior que a data final');
     }
 
+    if (dt_i < new Date().setHours(-2160)) {
+        return Boom.badRequest('Data limite para extrato é de 90 dias');
+    }
+
     const extrato = await lancamentoRepository.extratoByContaId(userId, dt_inicial, dt_final)
 
     return extrato.reverse()

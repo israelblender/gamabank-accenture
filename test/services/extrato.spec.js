@@ -2,19 +2,17 @@ const chai = require('chai');
 const chaiAsPromised = require("chai-as-promised");
 const assert = chai.assert;
 chai.use(chaiAsPromised);
-const Boom = require("@hapi/boom");
-const faker = require("faker");
 
 const expect = chai.expect;
 
 const database = require("../../src/configs/database");
 const userService = require("../../src/api/services/user.service");
-const contaService = require("../../src/api/repositories/conta.repository")
-const { transferIntern } = require('../../src/api/services/transfer.service')
+const contaRepository = require("../../src/api/repositories/conta.repository")
+const depositService = require("../../src/api/services/deposit.service")
 const { extratoService } = require('../../src/api/services/lancamento.service')
 
 
-describe('Lancamento Service', async() => {
+describe('Validar Serviço de extrato', async() => {
     before(async () => {
         const newUser = await userService.createUser (
             "Alessandro Oliveira",
@@ -22,39 +20,42 @@ describe('Lancamento Service', async() => {
             "user.sample@gmail.com",
             "Alessandro2!",
             "11963334870"
-            );
-
-        const newUser2 = await userService.createUser (
-            "Pedro Henrique",
-            "06400613897",
-            "user2.sample@gmail.com",
-            "PHenrique2!",
-            "11999995555"
         );
 
-        const deposito = await contaService.updateBalanceAccount(newUser.id, 15000)
-        const transfer = await transferIntern(newUser.id, 'user2.sample@gmail.com', 1500.8);
+        const deposito = await depositService.updateBalanceAsHolder(38, 15000)
 
     });
 
     after(async () => {
-      await database.rollback();
+       await database.rollback();
     });
 
     it('Retorna o saldo e o extrato por faixa de datas', async () => {
-        const conta = await contaService.findContaByUserEmail("user.sample@gmail.com")
-        const extrato = await extratoService(conta.id, '2021-04-01', '2021-04-10');
-        console.log(extrato)
-        expect(extrato).to.haveOwnProperty("lancamentos");
-        expect(extrato).to.haveOwnProperty("saldo");
+        const conta = await contaRepository.findAccountByEmail("user.sample@gmail.com")
+        const extrato = await extratoService(conta.id, '2021-04-01', '2021-04-12');
+
+        expect(extrato)
     });
 
-    it('Retorna o Saldo com os lançamentos do dia', async () => {
-        const conta = await contaService.findContaByUserEmail("user.sample@gmail.com")
-        const saldo = await extratoService(conta.id, null, null);
-        console.log(saldo)
-        expect(saldo).to.haveOwnProperty("lancamentos");
-        expect(saldo).to.haveOwnProperty("saldo");
+    it('Mensagem de erro: data inicial > data final', async () => {
+        const conta = await contaRepository.findAccountByEmail("user.sample@gmail.com")
+        const extrato = await extratoService(conta.id, new Date(), '2021-03-01');
+
+        assert.equal(extrato, 'Error: Data inicial não pode ser maior que a data final');
+    });
+
+    it('Mensagem de erro: Data excede limite para extrato', async () => {
+        const conta = await contaRepository.findAccountByEmail("user.sample@gmail.com")
+        const extrato = await extratoService(conta.id, '2021-01-01', new Date());
+
+        assert.equal(extrato, 'Error: Data limite para extrato é de 90 dias');
+    });
+
+    it('Mensagem de erro: Data inválida', async () => {
+        const conta = await contaRepository.findAccountByEmail("user.sample@gmail.com")
+        const extrato = await extratoService(conta.id, '2021-01-01', '2021-13-01');
+
+        assert.equal(extrato, 'Error: Data inválida');
     });
 
 });
