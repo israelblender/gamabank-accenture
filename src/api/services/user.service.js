@@ -1,6 +1,6 @@
 const Boom = require("@hapi/boom");
 const userRepository = require("../repositories/user.repository");
-const contaService = require("../services/conta.service");
+const accountService = require("../services/account.service");
 const cpfHelper = require("../../helpers/cpf.helper");
 const checkPassword = require("../../helpers/checkPassword");
 const checkEmail = require("../../helpers/email.helper");
@@ -52,7 +52,7 @@ const createUser = async (nome, cpf, email, senha, telefone) => {
   );
 
   // pego o id do usuario criado e envio para criação de conta
-  const conta = await contaService.createConta(user.id);
+  const conta = await accountService.store(user.id);
 
   return {
     message: "O Usuario foi Criado com sucesso",

@@ -1,12 +1,11 @@
 const database = require("../../configs/database");
 
-const findContaByUserId = async (idUsuario) => {
+const findAccountByUserId = async (idUsuario) => {
   const account = await database.execute(
     `SELECT * FROM conta WHERE idUsuario='${idUsuario}'`
   );
 
   // retorna o primeiro usuario encontrado
-  console.log(account[0]);
   return account[0];
 };
 
@@ -18,7 +17,7 @@ const findAccountByEmail = async (email) => {
   return user[0];
 };
 
-const createConta = async (idUsuario) => {
+const createAccount = async (idUsuario) => {
   const saldo = 0;
   const dateAbertura = new Date();
   const dateAberturaFormated = dateAbertura.toISOString().split("T")[0];
@@ -30,7 +29,7 @@ const createConta = async (idUsuario) => {
 };
 
 const extratoByContaId = async (userId, dt_inicial, dt_final) => {
-  const conta = await findContaByUserId(userId);
+  const conta = await findAccountByUserId(userId);
 
   const sqlStatement = `SELECT data, descricao, tipo, valor FROM transacoes WHERE idConta = ${conta.id} AND data BETWEEN ${dt_inicial} AND ${dt_final} ORDER BY data DESC`;
 
@@ -41,14 +40,14 @@ const extratoByContaId = async (userId, dt_inicial, dt_final) => {
 
 const updateBalanceAccount = async (id, value) => {
   const balance = await database.execute(
-    `UPDATE conta SET saldo = ${value} WHERE idUsuario = '${id}'`
+    `UPDATE conta SET saldo = ${value} WHERE id=${id}`
   );
   return balance;
 };
 
 module.exports = {
-  createConta,
-  findContaByUserId,
+  createAccount,
+  findAccountByUserId,
   extratoByContaId,
   findAccountByEmail,
   updateBalanceAccount,

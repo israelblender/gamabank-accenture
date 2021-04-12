@@ -1,10 +1,10 @@
 const JWT = require("jsonwebtoken");
 const userRepository = require("../repositories/user.repository");
-const accountRepository = require("../repositories/conta.repository");
+const accountRepository = require("../repositories/account.repository");
 const bcrypt = require("../../helpers/mycrypto");
 
 const Boom = require("@hapi/boom");
-const secret = process.env.SECRET
+const secret = process.env.SECRET;
 
 const generate = (userData) =>
   new Promise((resolve) => {
@@ -40,7 +40,7 @@ const signIn = async ({ email, senha }) => {
     throw Boom.forbidden("Senha incorreta");
   }
 
-  const userAccount = await accountRepository.findContaByUserId(findUser.id);
+  const userAccount = await accountRepository.findAccountByUserId(findUser.id);
 
   const userData = {
     userId: findUser.id,

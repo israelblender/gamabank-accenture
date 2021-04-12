@@ -1,57 +1,80 @@
-const contaRepository = require("../repositories/conta.repository");
+const contaRepository = require("../repositories/account.repository");
 const lancamentoRepository = require("../repositories/lancamento.repository");
 const userRepository = require("../repositories/user.repository");
 const { validateCpf } = require("../../helpers/cpf.helper");
 const validarEmail = require("email-validator");
-const { sendMessage } = require("../../helpers/nodemailer");
 const Boom = require("@hapi/boom");
+
 const updateBalanceAsHolder = async (userId, value) => {
-  const findAccount = await contaRepository.findContaByUserId(userId);
+  const findAccount = await contaRepository.findAccountByUserId(userId);
   if (findAccount === undefined) {
-    return Boom.notFound("Não existe conta para o correntista relacionado");
+    return Boom.notFound("Correntista não encontrado");
   }
   const valueAdd = parseFloat(value);
   if (valueAdd <= 0) {
     return Boom.conflict("Valor não pode ser depositado");
   }
-  const cpfUser = await userRepository.findUserById(userId).cpf;
-  const idAccount = await findAccount.id;
-  await lancamentoRepository.createNewLaunchDebit(idAccount, valueAdd);
+
+  const description = `Deposito realizado na conta pelo correntista`;
+
+  await lancamentoRepository.createNewLauchDeposit(
+    findAccount.id,
+    description,
+    valueAdd
+  );
+
   const atualBalance = findAccount.saldo;
   let valueAfterDebit = parseFloat(atualBalance) + valueAdd;
-  await contaRepository.updateBalanceAccount(userId, valueAfterDebit);
-  const findEmailByUser = await userRepository.findUserById(userId).email;
-  //await sendMessage(findEmailByUser, `Depósito realizado com sucesso com valor de R$ ${value}`);
+
+  await contaRepository.updateBalanceAccount(findAccount.id, valueAfterDebit);
+
   return {
     message: "Depósito realizado com sucesso",
+    value: valueAdd,
+    date: new Date(),
   };
 };
+
 const updateBalanceAsNotHolder = async (cpf, email, value) => {
   if (!validarEmail.validate(email)) {
     return Boom.conflict("EMAIL inválido");
   }
+
+  if (!validateCpf(cpf)) {
+    return Boom.conflict("CPF inválido");
+  }
+
   const findUser = await userRepository.findUserByEmail(email);
   const userId = findUser.id;
   if (findUser === undefined) {
     return Boom.notFound("Não existe usuário com esse email cadastrado");
   }
-  const findAccount = await contaRepository.findContaByUserId(userId);
+  const findAccount = await contaRepository.findAccountByUserId(findUser.id);
   const idAccount = findAccount.id;
   const valueAdd = parseFloat(value);
   if (valueAdd <= 0) {
     return Boom.conflict("Valor não pode ser depositado");
   }
-  if (!validateCpf(cpf)) {
-    return Boom.conflict("CPF inválido");
-  }
-  await lancamentoRepository.createNewLaunchDebit(idAccount, cpf, valueAdd);
+
+  const description = `Deposito realizado na conta pelo CPF=${cpf}`;
+
+  await lancamentoRepository.createNewLauchDeposit(
+    idAccount,
+    description,
+    valueAdd
+  );
+
+  // update account balance
   const atualBalance = findAccount.saldo;
   let valueAfterDebit = parseFloat(atualBalance) + valueAdd;
-  await contaRepository.updateBalanceAccount(userId, valueAfterDebit);
+  await contaRepository.updateBalanceAccount(findAccount.id, valueAfterDebit);
   // enviar email p avisar q deposito chegou
   //await sendMessage(email, `Depósito realizado com sucesso pelo cpf:${cpf} com valor de R$ ${value}`);
   return {
     message: "Depósito realizado com sucesso",
+    value: valueAdd,
+    date: new Date(),
   };
 };
+
 module.exports = { updateBalanceAsHolder, updateBalanceAsNotHolder };

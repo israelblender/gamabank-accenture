@@ -9,15 +9,15 @@ const findOpenedInvoiceByAccountId = async (accountId) => {
   return fatura[0];
 };
 
-const paymentFatura = async (id, valor) => {
+const payInvoice = async (id, valor) => {
   const fatura = await database.execute(
-    `UPDATE fatura SET valorPago = ${valor} WHERE idConta = '${id}'`
+    `UPDATE fatura SET valorPago = ${valor} WHERE id = '${id}'`
   );
   return fatura;
 };
 
 //Procura fatura por mes de referencia
-const findInvoiceSpecific = async (accountId, referenceMonth) => {
+const findInvoiceByReferenceMonth = async (accountId, referenceMonth) => {
   const invoice = await database.execute(
     `SELECT * FROM fatura WHERE idConta=${accountId} and mesReferencia='${referenceMonth}'`
   );
@@ -25,7 +25,7 @@ const findInvoiceSpecific = async (accountId, referenceMonth) => {
 };
 
 //Cria fatura para um mes especifico
-const createInvoiceSpecific = async (accountId, referenceMonth, status) => {
+const createInvoice = async (accountId, referenceMonth, status) => {
   const diaFechamento = 20;
   const diaVencimento = 5;
   const valorConsolidado = 0;
@@ -42,9 +42,6 @@ const updateInvoiceValueConsolidation = async (
   invoiceId,
   valueConsolidation
 ) => {
-  console.log(
-    `UPDATE fatura SET valorConsolidado=${valueConsolidation} WHERE id=${invoiceId}`
-  );
   const updateInvoice = await database.execute(
     `UPDATE fatura SET valorConsolidado=${valueConsolidation} WHERE id=${invoiceId}`
   );
@@ -53,8 +50,8 @@ const updateInvoiceValueConsolidation = async (
 
 module.exports = {
   findOpenedInvoiceByAccountId,
-  findInvoiceSpecific,
-  createInvoiceSpecific,
+  findInvoiceByReferenceMonth,
+  createInvoice,
   updateInvoiceValueConsolidation,
-  paymentFatura
+  payInvoice,
 };

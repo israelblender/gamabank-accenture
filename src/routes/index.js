@@ -1,24 +1,19 @@
 const authController = require("../api/controllers/auth.controller");
 const depositController = require("../api/controllers/deposit.controller");
-const {
-  rootHandler,
-} = require("../api/controllers/app.controller");
+const { rootHandler } = require("../api/controllers/app.controller");
 const Joi = require("joi");
 const userController = require("../api/controllers/user.controller");
 const transferController = require("../api/controllers/transfer.controller");
 const lancamentoController = require("../api/controllers/lancamento.controller");
 const payController = require("../api/controllers/pay.controller");
-const paymentController = require("../api/controllers/payment.controller");
-const faturaController = require("../api/controllers/fatura.controller");
+const invoiceController = require("../api/controllers/invoice.controller");
 
 const {
   LoginRequestDTO,
   LoginResponseSuccessDTO,
 } = require("../api/models/dto/auth.dto");
 
-const {
-  TransferRequestDTO,
-} = require("../api/models/dto/transfer.dto");
+const TransferDto = require("../api/models/dto/transfer.dto");
 
 const {
   DepositNotHolderRequestDTO,
@@ -60,14 +55,35 @@ const root = {
   },
 };
 
+const createUser = {
+  method: "POST",
+  path: "/createaccount",
+  handler: userController.store,
+  options: {
+    tags: ["api", "Criação da Conta"],
+    description: "Rota criar usuario/conta",
+    notes: "Rota principal da nossa aplicação para criação do usuario e conta",
+    validate: {
+      payload: CreateUserDTO,
+    },
+    response: {
+      status: {
+        200: CreateUserResponseDTO,
+        400: Joi.any(),
+        401: Joi.any(),
+        503: Joi.any(),
+      },
+    },
+  },
+};
+
 const login = {
   method: "POST",
   path: "/login",
   handler: authController.login,
   options: {
-    tags: ["api", "login"],
+    tags: ["api", "Login"],
     description: "Autenticação de usuário",
-    notes: "Anotações da rota...",
     validate: {
       payload: LoginRequestDTO,
     },
@@ -88,11 +104,11 @@ const makeDepositAsHolder = {
   handler: depositController.depositAsHolder,
   options: {
     auth: "jwt",
-    tags: ["api", "depósito"],
-    description: "Rota para o dono da conta realizar depósito em conta debito",
+    tags: ["api", "Depósito"],
+    description: "Rota para o dono da conta realizar depósito em sua conta",
     notes: "Obs: So a pessoa dono da conta pode depositar",
     validate: {
-      headers: Joi.object({ authorization: Joi.string().required() }).unknown(),//DepositHeaderDTO,
+      headers: Joi.object({ authorization: Joi.string().required() }).unknown(), //DepositHeaderDTO,
       payload: DepositHolderRequestDTO,
     },
     response: {
@@ -113,7 +129,8 @@ const makeDepositAsNotHolder = {
   options: {
     tags: ["api", "depósito"],
     description: "Rota para qualquer pessoa realizar depósito em conta debito",
-    notes: "Obs: Qualquer pessoa com o email do dono da conta pode depositar",
+    notes:
+      "Obs: Qualquer pessoa com o email do dono da conta pode depositar, obrigatorio se identifcar (informar CPF)",
     validate: {
       payload: DepositNotHolderRequestDTO,
     },
@@ -128,48 +145,25 @@ const makeDepositAsNotHolder = {
   },
 };
 
-const createUser = {
+const extract = {
   method: "POST",
-  path: "/user",
-  handler: userController.store,
+  path: "/extract",
+  handler: lancamentoController.extrato,
   options: {
-    tags: ["api", "usuario"],
-    description: "Rota criar usuario/conta",
-    notes: "Rota principal da nossa aplicação para criação do usuario e conta",
-    validate: {
-      payload: CreateUserDTO,
-    },
-    response: {
-      status: {
-        200: CreateUserResponseDTO,
-        400: Joi.any(),
-        401: Joi.any(),
-        503: Joi.any(),
-      },
-    },
-  },
-};
-
-const invoices = {
-  method: "POST",
-  path: "/invoice",
-  handler: faturaController.getInvoice,
-  options: {
+    tags: ["api", "extrato"],
     auth: "jwt",
-    tags: ["api", "Invoices"],
-    description: "Rota Buscar faturas por mes de referencia",
+    description: "Exibir saldo/extrato da conta",
     notes:
-      "Rota para buscar transações do mes referente, caso não informar o mes de referencia, será retornado a fatura em aberto do mes atual",
+      "Caso não for informado um range data, será retornado as transações de hoje e o período máximo para consulta é de 3 meses",
     validate: {
-      payload: InvoiceTransactionRequestDto,
       headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
+      payload: ExtratoRequestDTO,
     },
     response: {
       status: {
-        200: InvoiceTransactionResponseDto,
-        400: Joi.any(),
-        401: Joi.any(),
-        503: Joi.any(),
+        200: Joi.any(),
+        //400: ExtratoResponseErrorDTO,
+        500: Joi.any(),
       },
     },
   },
@@ -187,35 +181,12 @@ const transfer = {
       "É possível fazer transferência para correntistas do Gamabank ou correntistas de outro banco, para correntistas do Gamabank basta informar o e-mail e valor, correntistas de outro banco basta informar um CPF válido, código do banco e valor.",
     validate: {
       headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
-      payload: TransferRequestDTO,
+      payload: TransferDto.TransferRequestDTO,
     },
     response: {
       status: {
-        200: Joi.string(),
+        200: TransferDto.TransferResponseDTO,
         400: Joi.any(),
-        401: Joi.any(),
-        503: Joi.any(),
-      },
-    },
-  },
-};
-
-const payment = {
-  method: "POST",
-  path: "/pay/invoice",
-  handler: paymentController.payment,
-  options: {
-    tags: ["api", "payment"],
-    auth: "jwt",
-    description: "Rota para pagamento da fatura.",
-    notes:
-      "Para o pagamento ser concluído com sucesso, o correntista precisa ter o saldo em conta.",
-    validate: {
-      headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
-    },
-    response: {
-      status: {
-        200: Joi.string(),
         401: Joi.any(),
         503: Joi.any(),
       },
@@ -229,16 +200,16 @@ const payDebit = {
   handler: payController.payWithDebit,
   options: {
     auth: "jwt",
-    tags: ["api", "debito", "pagamento"],
-    description: "Pagamento com débito",
-    notes: "Obs: So precisa do valor para executar com sucesso",
+    tags: ["api", "Débito", "pagamento"],
+    description: "Lançamentos de Despesas de Débito",
+    notes: "Informar valor e descrição (opcional)",
     validate: {
       headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
       payload: BuyDebitRequestDTO,
     },
     response: {
       status: {
-        200: BuyDebitResponseDTO,
+        200: Joi.any(),
         400: Joi.any(),
         401: Joi.any(),
         503: Joi.any(),
@@ -271,25 +242,49 @@ const payCredit = {
   },
 };
 
-const extrato = {
+const payment = {
   method: "POST",
-  path: "/extract",
-  handler: lancamentoController.extrato,
+  path: "/invoice/pay",
+  handler: payController.payInvoice,
   options: {
-    tags: ["api", "extrato"],
+    tags: ["api", "Invoice"],
     auth: "jwt",
-    description: "Exibir saldo/extrato da conta",
+    description: "Rota para pagamento da fatura.",
     notes:
-      "Caso não for informado um range data, será retornado as transações de hoje e o período máximo para consulta é de 3 meses",
+      "Para o pagamento ser concluído com sucesso, o correntista precisa ter o saldo em conta.",
     validate: {
       headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
-      payload: ExtratoRequestDTO,
     },
     response: {
       status: {
         200: Joi.any(),
-        //400: ExtratoResponseErrorDTO,
-        500: Joi.any(),
+        401: Joi.any(),
+        503: Joi.any(),
+      },
+    },
+  },
+};
+
+const invoices = {
+  method: "POST",
+  path: "/invoice",
+  handler: invoiceController.getInvoices,
+  options: {
+    auth: "jwt",
+    tags: ["api", "Invoices"],
+    description: "Rota Buscar faturas por mes de referencia",
+    notes:
+      "Rota para buscar transações do mes referente, caso não informar o mes de referencia, será retornado a fatura em aberto do mes atual",
+    validate: {
+      payload: InvoiceTransactionRequestDto,
+      headers: Joi.object({ authorization: Joi.string().required() }).unknown(),
+    },
+    response: {
+      status: {
+        200: InvoiceTransactionResponseDto,
+        400: Joi.any(),
+        401: Joi.any(),
+        503: Joi.any(),
       },
     },
   },
@@ -299,12 +294,12 @@ module.exports = [
   root,
   login,
   createUser,
-  extrato,
+  extract,
   payDebit,
   makeDepositAsHolder,
   makeDepositAsNotHolder,
   transfer,
   payCredit,
   invoices,
-  payment
+  payment,
 ];

@@ -1,6 +1,6 @@
 const database = require("../../configs/database");
 
-const findCreditoByIdConta = async (idConta) => {
+const findCreditByAccountId = async (idConta) => {
   const credito = await database.execute(
     `SELECT * FROM credito WHERE idConta='${idConta}'`
   );
@@ -8,7 +8,7 @@ const findCreditoByIdConta = async (idConta) => {
   return credito[0];
 };
 
-const createCredito = async (idConta) => {
+const createAccountCredit = async (idConta) => {
   const limite = 200;
   const limiteDisponivel = 200;
 
@@ -27,6 +27,7 @@ const getAvaliableCredit = async (accoutId) => {
   );
   return credit[0];
 };
+
 const updateAvaliableCredit = async (accoutId, new_avaliable_credit) => {
   const credit = await database.execute(
     `UPDATE credito SET limiteDisponivel=${new_avaliable_credit} WHERE idConta= ${accoutId}`
@@ -42,16 +43,9 @@ const addTransaction = async (invoiceId, date, description, value) => {
   return transaction;
 };
 
-const findTransactionsByInvoiceId = async (invoiceId) => {
-  const transaction = await database.execute(
-    `SELECT * FROM transacoescredito WHERE idFatura= ${invoiceId}`
-  );
-  return transaction;
-};
-
 module.exports = {
-  createCredito,
-  findCreditoByIdConta,
+  createAccountCredit,
+  findCreditByAccountId,
   getAvaliableCredit,
   updateAvaliableCredit,
   addTransaction,

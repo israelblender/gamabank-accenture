@@ -1,14 +1,6 @@
-const invoiceService = require("../services/fatura.service");
 const transacoesCreditoService = require("../services/transacoesCredito.service");
 
-const openInvoices = async (request, h) => {
-  const { userId } = await request.auth.credentials;
-  const { cpf, value } = request.payload;
-
-  invoiceService.findOpenInvoice(userId);
-};
-
-const getInvoice = async (request, h) => {
+const getInvoices = async (request, h) => {
   const { accountId } = await request.auth.credentials;
 
   let mesReferencia;
@@ -25,4 +17,4 @@ const getInvoice = async (request, h) => {
   return getOpenInvoice;
 };
 
-module.exports = { openInvoices, getInvoice };
+module.exports = { getInvoices };
