@@ -4,7 +4,9 @@ const register = async (id, tipo, descricao, valor) => {
   const data = new Date();
 
   const register = await database.execute(
-    `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${id}', '${data.toLocaleDateString()}', '${tipo}','${descricao}','${valor}')`
+    `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${id}', '${data.toLocaleDateString(
+      "en-US"
+    )}', '${tipo}','${descricao}','${valor}')`
   );
 
   return register;
@@ -23,7 +25,9 @@ const createNewLaunchPay = async (idAccount, value) => {
   const descricao = `Pagamento débito em conta`;
 
   const newLaunch = await database.execute(
-    `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString()}', '${tipo}','${descricao}','${value}')`
+    `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString(
+      "en-US"
+    )}', '${tipo}','${descricao}','${value}')`
   );
   return newLaunch;
 };
@@ -33,7 +37,9 @@ const createNewLauchDeposit = async (idAccount, description, value) => {
   const tipo = "CRÉDITO";
 
   const newLaunch = await database.execute(
-    `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString()}', '${tipo}','${description}','${value}')`
+    `INSERT INTO lancamentos (idConta, data, tipo, descricao, valor) VALUES ('${idAccount}', '${data.toLocaleDateString(
+      "en-US"
+    )}', '${tipo}','${description}','${value}')`
   );
 
   return newLaunch;
